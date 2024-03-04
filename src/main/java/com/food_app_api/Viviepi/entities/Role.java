@@ -5,31 +5,23 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
-@Entity(name = "role_models")
+@Entity(name = "role")
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(unique = true)
-    private String roleTitle;
+    @Column(name = "name", nullable = false,unique = true)
+    private String name;
 
-    private String description;
+    @OneToMany(mappedBy = "idRole")
+    private Set<RolesUsers> rolesUsersEntities;
 
-    private String created_by;
-
-    private LocalDateTime created_dt;
-
-    private String updated_by;
-
-    private LocalDateTime updated_dt;
-
-    private Boolean active;
-
-
-    // getters and setters
 }

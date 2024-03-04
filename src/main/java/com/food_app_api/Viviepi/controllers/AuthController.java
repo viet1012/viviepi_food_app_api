@@ -1,47 +1,67 @@
 package com.food_app_api.Viviepi.controllers;
 
-import com.food_app_api.Viviepi.dtos.CustomerDTO;
-import com.food_app_api.Viviepi.entities.User;
-import com.food_app_api.Viviepi.jwt.AuthResponse;
-import com.food_app_api.Viviepi.jwt.JwtTokenProvider;
-import com.food_app_api.Viviepi.services.AuthService;
+import com.food_app_api.Viviepi.exceptions.AlreadyExistException;
+import com.food_app_api.Viviepi.jwt.JwtUtil;
+import com.food_app_api.Viviepi.payload.request.SignInRequest;
+import com.food_app_api.Viviepi.payload.request.SignUpRequest;
+import com.food_app_api.Viviepi.payload.response.ResponseObject;
+import com.food_app_api.Viviepi.payload.response.ResponseSuccess;
+import com.food_app_api.Viviepi.services.AccountService;
 import com.food_app_api.Viviepi.services.UserService;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
 @RestController
-@RequestMapping("/api/auth/")
+@RequestMapping("/auth")
+@AllArgsConstructor
+@CrossOrigin
 public class AuthController {
     @Autowired
-    private AuthenticationProvider authenticationProvider;
+    AuthenticationManager authenticationManager;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    JwtUtil jwtUtil;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    AccountService accountService;
 
     @Autowired
-    private AuthService authService;
+    PasswordEncoder passwordEncoder;
 
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUserWithRole( @RequestParam(name = "role_id", defaultValue = "2") Long roleId , @RequestBody CustomerDTO request) {
+    @PostMapping("/sign-in")
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<ResponseObject> signin(@RequestBody SignInRequest signInDTO) {
 
-        // Tạo một người dùng mới
-        User registeredUser = authService.registerUser( roleId ,request);
+        return new ResponseEntity<>(accountService.signInUser(signInDTO), HttpStatus.OK);
+    }
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(registeredUser.getEmail());
-        String token = jwtTokenProvider.generateToken(userDetails);
-
-        AuthResponse authResponse = new AuthResponse();
-        authResponse.setAccessToken(token);
-        authResponse.setUser(registeredUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(authResponse);
+    @PostMapping("/sign-up")
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> SignUp(@Valid @RequestBody SignUpRequest signUpRequest) throws AlreadyExistException, UnsupportedEncodingException {
+        ResponseSuccess success = new ResponseSuccess();
+        if(accountService.checkEmailExists(signUpRequest.getEmail())){
+            throw new AlreadyExistException("Email is already exist!");
+        }
+        signUpRequest.setRoleName("USER");
+        success.setStatus(HttpStatus.OK.value());
+        success.setData(accountService.signUp(signUpRequest));
+        return new ResponseEntity<>(success,HttpStatus.OK);
 
     }
 

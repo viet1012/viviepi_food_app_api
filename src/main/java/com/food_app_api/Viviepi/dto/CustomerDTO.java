@@ -1,4 +1,4 @@
-package com.food_app_api.Viviepi.dtos;
+package com.food_app_api.Viviepi.dto;
 
 
 import lombok.Getter;

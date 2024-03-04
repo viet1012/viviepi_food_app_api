@@ -1,45 +1,23 @@
 package com.food_app_api.Viviepi.services;
 
-import com.food_app_api.Viviepi.dtos.UserDTO;
-import com.food_app_api.Viviepi.entities.User;
-import com.food_app_api.Viviepi.jwt.JwtTokenProvider;
-import com.food_app_api.Viviepi.repositories.RoleRepository;
-import com.food_app_api.Viviepi.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import com.food_app_api.Viviepi.dto.UserDTO;
+import com.food_app_api.Viviepi.dto.UserSignUpDTO;
+import com.food_app_api.Viviepi.payload.request.SignInRequest;
+import com.food_app_api.Viviepi.payload.request.SignUpRequest;
+import com.food_app_api.Viviepi.payload.response.ResponseObject;
+import com.food_app_api.Viviepi.payload.response.ResponseSuccess;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+public interface UserService {
+    boolean checkEmailExists(String email);
 
-@Service
-public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+    UserDTO findUserByEmail(String email);
 
-    @Autowired
-    private RoleRepository roleRepository;
+    UserDTO addNewUser(long id);
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    UserDTO showUserInfo(String email);
 
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
-
-    public User getUserFromEmail(String email) {
-        Optional<User> optionalUser = userRepository.findByEmail(email);
-        if(optionalUser.isPresent())
-        {
-            return optionalUser.get();
-        }
-        else {
-            return null;
-        }
-    }
+    long getIdByEmail(String emai);
 
 
 }
