@@ -25,7 +25,7 @@ public class VerificationToken {
     private static final int EXPIRATION_TIME = 15;
 
     @OneToOne
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     public VerificationToken(String token, User user) {

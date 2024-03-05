@@ -21,7 +21,10 @@ import com.food_app_api.Viviepi.payload.request.SignInRequest;
 import com.food_app_api.Viviepi.payload.request.SignUpRequest;
 import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.repositories.*;
+import com.food_app_api.Viviepi.util.EmailUtil;
 import com.google.gson.Gson;
+import jakarta.mail.MessagingException;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,10 +38,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.cert.CertificateException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AccountService implements IAccountService{
@@ -74,6 +79,9 @@ public class AccountService implements IAccountService{
     IVerificationTokenRepository verificationTokenRepository;
 
     @Autowired
+    private  EmailUtil emailUtil;
+
+    @Autowired
     Gson gson = new Gson();
 
     @Override
@@ -87,11 +95,23 @@ public class AccountService implements IAccountService{
         return null;
     }
 
-    @Override
-    public ResponseObject signInAdmin(SignInRequest signInRequest) {
-        return null;
-    }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseObject signInAdmin(SignInRequest signInRequest) {
+        RolesUsers rolesUsers = roleUserRepository.findOneByEmail(
+                signInRequest.getEmail()
+        );
+        if ((rolesUsers.getIdRole().getName().equals("ADMIN"))){
+            return new ResponseObject(
+                    200,
+                    "Sign-In by admin !",
+                    token(signInRequest.getEmail(), signInRequest.getPassword())
+            );
+        }else {
+            throw new PermissionDenyException(403, "Permission Denied !", null);
+        }
+    }
 
 
     @Override
@@ -108,7 +128,13 @@ public class AccountService implements IAccountService{
         User newUser = userRepository.save(user);
         UserSignUpDTO userSignUpDTO = userMapper.userSignUpToUserSignUpDTO(newUser);
         RolesUsersDTO rolesUsersDTO = roleUsersMapper.toRoleUserDTO(newUser, role);
+        String verifyCode = String.format("%040d", new BigInteger(
+                UUID.randomUUID().toString().replace("-", ""), 16)
+        );
 
+        VerificationToken verificationToken = new VerificationToken(verifyCode.substring(0, 6), user);
+        userSignUpDTO.setToken(verificationToken.getToken());
+        this.verificationTokenRepository.save(verificationToken);
         //save cái dto converter đã xử lý xuống database
         this.roleUserRepository.save(
                 roleUsersMapper.toRoleUserEntity(rolesUsersDTO)
@@ -134,6 +160,7 @@ public class AccountService implements IAccountService{
             throw new PermissionDenyException(403, "Permission Denied !", null);
         }
     }
+
     public ResponseAuthentication token(String email, String password) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 email, password
@@ -156,6 +183,7 @@ public class AccountService implements IAccountService{
                 .refreshToken(refreshToken)
                 .build();
     }
+
     private void revokeAllUserTokens(User user){
         List<Tokens> validUserTokens = tokenRepository.findAllTokenValidByUser(user.getId());
         if (!validUserTokens.isEmpty()){
@@ -179,16 +207,62 @@ public class AccountService implements IAccountService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String verifyEmail(UserSignUpDTO signUpDTO) {
-        return null;
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(signUpDTO.getToken());
+        if (verificationToken.getUser().getIsActive()){
+            System.out.println("This account has already been verified, please login!");
+            return "This account has already been verified, please, login.";
+        }
+        String verificationResult = validateToken(signUpDTO.getToken());
+        if (verificationResult.equalsIgnoreCase("Valid")){
+            System.out.println("Email verified successfully. Now you can login to your account");
+            return "Email verified successfully. Now you can login to your account";
+        }
+        System.out.println("Invalid verification token !");
+        return "Invalid verification token !";
+    }
+
+    public String validateToken(String verifyToken) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(verifyToken);
+        if(verificationToken == null){
+            System.out.println("Invalid verification token !");
+            throw new VerificationTokenException(500, "Invalid verification token !");
+        }
+        if (verificationToken.getUser().getIsActive()){
+            System.out.println("This account has already been verified, please login!");
+            return "This account has already been verified, please, login.";
+        }
+        User userEntity = verificationToken.getUser();
+        Calendar calendar = Calendar.getInstance();
+        if ((verificationToken.getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0){
+            verificationTokenRepository.delete(verificationToken);
+            System.out.println("Token already expired !");
+            throw new VerificationTokenException(500, "Token already expired !");
+        }
+        userEntity.setIsActive(true);
+        userRepository.save(userEntity);
+        System.out.println("Token valid");
+        return "Valid";
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public String forgotPassword(String email) throws UnsupportedEncodingException {
-        return null;
+    public String forgotPassword(String email) throws UnsupportedEncodingException, MessagingException {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isEmpty()){
+            System.out.println("User not exist !");
+            throw new UserNotFoundException(404, "User not exist !");
+        }
+        String verifyCode = String.format("%040d", new BigInteger(
+                UUID.randomUUID().toString().replace("-", ""), 16)
+        );
+        VerificationToken verificationToken = new VerificationToken(verifyCode.substring(0, 6), optionalUser.get());
+        this.verificationTokenRepository.save(verificationToken);
+        this.emailUtil.sendResetPassword(email, verifyCode.substring(0, 6));
+        System.out.println("Check your email to reset password if account was registered !");
+        return "Check your email to reset password if account was register !";
     }
-
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -227,7 +301,20 @@ public class AccountService implements IAccountService{
     }
 
     @Override
-    public String resendActiveAccount(String email) throws UnsupportedEncodingException {
-        return null;
+    @Transactional(rollbackFor = Exception.class)
+    public String resendActiveAccount(String email) throws  UnsupportedEncodingException {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        User user = optionalUser.get();
+        if (optionalUser.isEmpty()){
+            System.out.println("User not found or exist !");
+            throw new ObjectNotFoundException(404, "User not found or exist !");
+        }
+        String verifyCode = String.format("%040d", new BigInteger(
+                UUID.randomUUID().toString().replace("-", ""), 16)
+        );
+        VerificationToken verificationToken = new VerificationToken(verifyCode.substring(0, 6), user);
+        this.verificationTokenRepository.save(verificationToken);
+
+        return "Verification code is resend to your email ! please check email to activation account again !";
     }
 }

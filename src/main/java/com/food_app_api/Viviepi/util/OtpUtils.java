@@ -1,4 +1,4 @@
-package com.food_app_api.Viviepi.utils;
+package com.food_app_api.Viviepi.util;
 
 import java.util.SplittableRandom;
 

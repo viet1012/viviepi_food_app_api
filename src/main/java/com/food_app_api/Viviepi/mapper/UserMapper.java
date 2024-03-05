@@ -16,7 +16,7 @@ public class UserMapper {
         userDTO.setEmail(user.getEmail());
         userDTO.setPassword(user.getPassword());
         userDTO.setFullName(user.getFullname());
-        userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setPhone(user.getPhoneNumber());
         userDTO.setVerifyCode(user.getVerifyCode());
         userDTO.setVerifyCodeExpired(user.getVerifyCodeExpired());
         userDTO.setActive(user.getIsActive());
@@ -29,6 +29,8 @@ public class UserMapper {
         userSignUpDTO.setEmail(user.getEmail());
         userSignUpDTO.setPassword(user.getPassword());
         userSignUpDTO.setActive(true);
+        // role default : "USER"
+        userSignUpDTO.setRoleName("USER");
         return userSignUpDTO;
     }
 

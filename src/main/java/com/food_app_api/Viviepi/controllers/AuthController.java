@@ -46,9 +46,9 @@ public class AuthController {
 
     @PostMapping("/sign-in")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<ResponseObject> signin(@RequestBody SignInRequest signInDTO) {
+    public ResponseEntity<ResponseObject> SignIn(@RequestBody SignInRequest signInDTO) {
 
-        return new ResponseEntity<>(accountService.signInUser(signInDTO), HttpStatus.OK);
+        return new ResponseEntity<>(accountService.signInAdmin(signInDTO), HttpStatus.OK);
     }
 
     @PostMapping("/sign-up")
