@@ -84,6 +84,7 @@ public Authentication authenticate(Authentication authentication) throws Authent
                         username, users.getIdUser().getPassword(), roles
                 );
                 SecurityContextHolder.getContext().setAuthentication(token);
+                System.out.println("TOKEN after CustomAuthentication: " + token);
                 return token;
             }else {
                 System.out.println("Username or password not exist !");

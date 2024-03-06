@@ -29,8 +29,8 @@ public class UserMapper {
         userSignUpDTO.setEmail(user.getEmail());
         userSignUpDTO.setPassword(user.getPassword());
         userSignUpDTO.setActive(true);
-        // role default : "USER"
-        userSignUpDTO.setRoleName("USER");
+       // role default : "USER"
+        userSignUpDTO.setRoleName("ROLE_USER");
         return userSignUpDTO;
     }
 

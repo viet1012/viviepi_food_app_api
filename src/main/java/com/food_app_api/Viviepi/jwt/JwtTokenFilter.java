@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -21,6 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -56,10 +58,30 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                                     responseToken.getUsername(), "", roles
                             );
 
+
+
                             System.out.println("Email: " + responseToken.getUsername());
                             System.out.println("Roles: " + roles);
                             SecurityContext contextHolder = SecurityContextHolder.getContext();
                             contextHolder.setAuthentication(userToken);
+
+                            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                            if (authentication != null && authentication.isAuthenticated()) {
+                                Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+                                if (authorities != null && !authorities.isEmpty()) {
+                                    System.out.println("User authorities:");
+
+                                    for (GrantedAuthority authority : authorities) {
+                                        System.out.println(authority.getAuthority());
+                                    }
+                                } else {
+                                    System.out.println("User has no authorities.");
+                                }
+                            } else {
+                                System.out.println("User is not authenticated.");
+                            }
+
                         }catch (JsonSyntaxException | IllegalStateException e){
                             System.out.println("Not accept type !" + e);
                             throw new JsonSyntaxException("Not accept type !", e);
