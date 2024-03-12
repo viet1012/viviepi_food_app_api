@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Builder
@@ -21,8 +22,8 @@ public class FoodDTO {
     private int quantity;
     private float price;
     private String createdBy;
-    private DateTime createdAt;
+    private LocalDateTime createdAt;
     private String updatedBy;
-    private DateTime updatedAt;
+    private LocalDateTime updatedAt;
 
 }
