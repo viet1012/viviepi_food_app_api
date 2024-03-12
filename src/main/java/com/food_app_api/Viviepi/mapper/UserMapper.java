@@ -4,12 +4,13 @@ package com.food_app_api.Viviepi.mapper;
 import com.food_app_api.Viviepi.dto.UserDTO;
 import com.food_app_api.Viviepi.dto.UserSignUpDTO;
 import com.food_app_api.Viviepi.entities.User;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class UserMapper {
     public UserDTO userToUserDTO(User user){
         UserDTO userDTO = new UserDTO();

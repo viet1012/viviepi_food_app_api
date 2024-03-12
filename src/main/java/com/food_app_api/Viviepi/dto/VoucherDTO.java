@@ -1,4 +1,21 @@
 package com.food_app_api.Viviepi.dto;
 
+import com.google.api.client.util.DateTime;
+import lombok.*;
+
+import java.time.LocalDateTime;
+
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class VoucherDTO {
+    private long id;
+    private String code;
+    private float value;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private int status;
+
 }
