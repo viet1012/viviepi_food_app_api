@@ -2,12 +2,15 @@ package com.food_app_api.Viviepi.controllers;
 
 import com.food_app_api.Viviepi.dto.VoucherDTO;
 import com.food_app_api.Viviepi.entities.Voucher;
+import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.services.VoucherService;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/voucher/api")
@@ -19,21 +22,23 @@ public class VoucherController {
     @GetMapping("/get/all")
     public ResponseEntity<?> getAllVoucher (){
         return ResponseEntity.status(HttpStatus.OK).body(
-                voucherService.test());
+                voucherService.getAll());
 
     }
     @GetMapping("/get/all/code")
-    public ResponseEntity<?> getAllCodeVoucher (){
-        return ResponseEntity.status(HttpStatus.OK).body(
-                voucherService.getAllCode());
+    public ResponseEntity<ResponseObject> getAllCodeVoucher (){
+        ResponseObject responseObject  = voucherService.getAll();
+        return new ResponseEntity<>(responseObject, HttpStatus.OK);
+
 
     }
     @GetMapping("/get/value")
-    public ResponseEntity<?> getValueByCode(@RequestBody VoucherDTO voucherDTO)
+    public ResponseEntity<ResponseObject> getValueByCode(@RequestBody VoucherDTO voucherDTO)
     {
         float value = voucherService.getValueByCode(voucherDTO.getCode());
-        return ResponseEntity.status(HttpStatus.OK).body(
-                value);
+        ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(), "Value ", value);
+
+        return new ResponseEntity<>(responseObject,HttpStatus.OK);
     }
     @PostMapping("/insert")
     public ResponseEntity<VoucherDTO> insertVoucher(@RequestBody VoucherDTO voucherDTO) {

@@ -18,11 +18,10 @@ public class FileController {
     private UploadLocalUtil uploadLocalUtil;
 
     @PostMapping("/upload")
-    public ResponseEntity<ResponseObject> uploadFile(
-                                                   ) {
+    public ResponseEntity<ResponseObject> uploadFile(@RequestParam("file") MultipartFile file,
+    @RequestParam("folderName")String folderName) {
         try {
-//            String fileName = uploadLocalUtil.storeFile(file, folderName);
-            String folderName = "test";
+            String fileName = uploadLocalUtil.storeFile(file, folderName);
             ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(),
                     "File uploaded successfully", folderName);
             return new ResponseEntity<>(responseObject, HttpStatus.OK);

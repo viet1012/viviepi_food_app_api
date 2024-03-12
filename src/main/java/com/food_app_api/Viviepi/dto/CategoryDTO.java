@@ -20,10 +20,7 @@ public class CategoryDTO{
     private String updatedBy;
     private DateTime updatedAt;
     private String categoryCode;
-    @NotBlank(message = "Please fill all data !")
     private String name;
-    @NotNull
     private int status;
-    @NotBlank(message = "Please fill all data !")
     private String bannerUrl;
 }

@@ -35,8 +35,6 @@ public class Category{
     private String categoryCode;
     @Column(name = "name")
     private String name;
-    @Column(name = "status", nullable = false)
-    private int status;
     @Column(name = "banner_url")
     private String bannerUrl;
 

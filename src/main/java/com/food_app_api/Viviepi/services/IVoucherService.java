@@ -16,5 +16,5 @@ public interface IVoucherService {
     void deleteVoucherByCode(String code);
     Boolean existDiscount(VoucherDTO discountTypeDTO);
     Boolean isExpire(String code);
-    List<Voucher> test();
+
 }

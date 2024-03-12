@@ -10,17 +10,17 @@ import java.util.stream.Collectors;
 
 @Component
 public class CategoryMapper {
-    public CategoryDTO toCategoryDTO(Category Category){
+    public CategoryDTO toCategoryDTO(Category category){
         return CategoryDTO.builder()
-                .id(Category.getId())
-                .createdBy(Category.getCreatedBy())
-                .createdAt(Category.getCreatedAt())
-                .updatedBy(Category.getUpdateBy())
-                .updatedAt(Category.getUpdateAt())
-                .categoryCode(Category.getCategoryCode())
-                .name(Category.getName())
-                .bannerUrl(Category.getBannerUrl())
-                .status(Category.getStatus())
+                .id(category.getId())
+                .createdBy(category.getCreatedBy() != null ? category.getCreatedBy() : "DefaultCreatedBy")
+                .createdAt(category.getCreatedAt())
+                .updatedBy(category.getUpdateBy() != null ? category.getUpdateBy() : "DefaultUpdateBy")
+                .updatedAt(category.getUpdateAt())
+                .categoryCode(category.getCategoryCode() != null ? category.getCategoryCode() : "DefaultCategoryCode")
+                .name(category.getName() != null ? category.getName() : "DefaultName")
+                .bannerUrl(category.getBannerUrl() != null ? category.getBannerUrl() : "DefaultBannerUrl")
+
                 .build();
     }
 
@@ -34,14 +34,13 @@ public class CategoryMapper {
                 .categoryCode(categoryDTO.getCategoryCode())
                 .name(categoryDTO.getName())
                 .bannerUrl(categoryDTO.getBannerUrl())
-                .status(categoryDTO.getStatus())
+
                 .build();
     }
 
     public Category toCategory(CategoryDTO categoryDTO, Category Category){
         Category.setId(categoryDTO.getId());
         Category.setName(categoryDTO.getName());
-        Category.setStatus(categoryDTO.getStatus());
         Category.setBannerUrl(categoryDTO.getBannerUrl());
         return Category;
     }

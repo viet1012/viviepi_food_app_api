@@ -30,24 +30,20 @@ public class VoucherService implements IVoucherService{
     public ResponseObject getAll() {
         List<VoucherDTO> voucherDTOS = new ArrayList<>();
         List<Voucher> voucherList = voucherRepository.findAll();
-//        List<String> codes = voucherRepository.getAllCode();
-//        if(voucherList.isEmpty())
-//        {
-//
-//            throw new ObjectEmptyException(
-//                    404, "List voucher is empty !");
-//        }
-//        for (Voucher voucher : voucherList){
-//            voucherDTOS.add(voucherMapper.toVoucherDTO(voucher));
-//        }
+        List<String> codes = voucherRepository.getAllCode();
+        if(voucherList.isEmpty())
+        {
+
+            throw new ObjectEmptyException(
+                    404, "List voucher is empty !");
+        }
+        for (Voucher voucher : voucherList){
+            voucherDTOS.add(voucherMapper.toVoucherDTO(voucher));
+        }
         return new ResponseObject(200, "List Voucher", voucherList);
 
     }
 
-    public List<Voucher> test()
-    {
-        return voucherRepository.findAll();
-    }
 
     @Override
     public List<String> getAllCode() {
