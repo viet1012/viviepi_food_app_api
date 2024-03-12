@@ -23,7 +23,7 @@ public class FileController {
         try {
             String fileName = uploadLocalUtil.storeFile(file, folderName);
             ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(),
-                    "File uploaded successfully", folderName);
+                    "File uploaded successfully", fileName);
             return new ResponseEntity<>(responseObject, HttpStatus.OK);
         } catch (Exception e) {
             ResponseObject responseObject = new ResponseObject(HttpStatus.INTERNAL_SERVER_ERROR.value(),

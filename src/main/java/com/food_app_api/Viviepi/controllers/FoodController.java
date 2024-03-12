@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -45,8 +46,8 @@ public class FoodController {
     }
 
     @PostMapping("/insert")
-    public ResponseEntity<ResponseObject> saveFood(@RequestBody FoodDTO foodDTO) {
-        foodService.saveFood(foodDTO);
+    public ResponseEntity<ResponseObject> saveFood(@RequestParam("file") MultipartFile file , @ModelAttribute FoodDTO foodDTO) {
+        foodService.saveFood(foodDTO,file);
         ResponseObject responseObject = new ResponseObject(HttpStatus.CREATED.value(), "Food saved successfully", null);
         return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
     }

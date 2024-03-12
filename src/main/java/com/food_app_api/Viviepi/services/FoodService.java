@@ -4,9 +4,12 @@ import com.food_app_api.Viviepi.dto.FoodDTO;
 import com.food_app_api.Viviepi.entities.Category;
 import com.food_app_api.Viviepi.entities.Food;
 import com.food_app_api.Viviepi.mapper.FoodMapper;
+import com.food_app_api.Viviepi.repositories.ICategoryRepository;
 import com.food_app_api.Viviepi.repositories.IFoodRepository;
+import com.food_app_api.Viviepi.util.UploadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,7 +20,13 @@ public class FoodService implements IFoodService {
     private IFoodRepository foodRepository;
 
     @Autowired
+    private ICategoryRepository categoryRepository;
+
+    @Autowired
     private FoodMapper foodMapper;
+
+    @Autowired
+    private UploadLocalUtil uploadLocalUtil;
 
     @Override
     public List<FoodDTO> getAllFood() {
@@ -38,9 +47,13 @@ public class FoodService implements IFoodService {
     }
 
     @Override
-    public void saveFood(FoodDTO foodDTO) {
-        Category category = getCategoryById(foodDTO.getCategory()); // You need to implement this method to get the Category entity
+    public void saveFood(FoodDTO foodDTO, MultipartFile file) {
+        String fileName = uploadLocalUtil.storeFile(file, "food");
+
+        Category category = getCategoryById(foodDTO.getCategory());
+        System.out.println("Category: " + category.getName());
         Food food = foodMapper.toFood(foodDTO, category);
+        food.setImgUrl(fileName);
         foodRepository.save(food);
     }
 
@@ -60,9 +73,7 @@ public class FoodService implements IFoodService {
         foodRepository.deleteById(id);
     }
 
-    // Implement this method to get Category entity by ID
     private Category getCategoryById(Long categoryId) {
-
-        return null;
+        return categoryRepository.findOneById(categoryId);
     }
 }
