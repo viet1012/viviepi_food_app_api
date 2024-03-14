@@ -16,7 +16,7 @@ public interface IVoucherRepository extends JpaRepository<Voucher, Long> {
     Optional<Voucher> findByCode(String code);
 
     @Query("SELECT vc.value FROM Voucher vc WHERE vc.code = :code")
-    Float getValueByCode(@Param("code") String code);
+    int getValueByCode(@Param("code") String code);
 
     @Query("SELECT vc.code FROM Voucher vc")
     List<String> getAllCode();

@@ -55,10 +55,10 @@ public class BillService implements IBillService {
         }else {
             System.out.println("Token is not valid!");
         }
-        Optional<Voucher> optionalVoucher = voucherRepository.findByCode(codeVoucher);
 
-        if (optionalVoucher.isPresent() && voucherService.isExpire(codeVoucher) ) {
-            Voucher voucher = optionalVoucher.get();
+        Voucher voucher = voucherService.findByCode(codeVoucher);
+
+        if (voucher != null && voucherService.isExpire(codeVoucher) ) {
             billDTO.setVoucher(voucher);
             // Apply voucher logic here (e.g., update total price of bill)
             // ship = 20.000

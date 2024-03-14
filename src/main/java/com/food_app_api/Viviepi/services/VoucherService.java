@@ -57,9 +57,9 @@ public class VoucherService implements IVoucherService{
     }
 
     @Override
-    public float getValueByCode(String code) {
+    public int getValueByCode(String code) {
         System.out.println("Code: " + code);
-        Float value = voucherRepository.getValueByCode(code);
+        int value = voucherRepository.getValueByCode(code);
 
         boolean exist = voucherRepository.existsByCode(code);
         if(!exist)
@@ -68,9 +68,7 @@ public class VoucherService implements IVoucherService{
             throw new ObjectEmptyException(
                     404, "Voucher is empty !");
         }
-        if (value == null) {
-            System.out.println("NULL!!!!");
-        }
+
         return value;
     }
 
@@ -109,12 +107,19 @@ public class VoucherService implements IVoucherService{
     @Override
     public Boolean isExpire(String code) {
         LocalDateTime now = LocalDateTime.now();
-        // Chuyển đổi thời điểm kết thúc voucher từ DateTime sang LocalDateTime
-        LocalDateTime endDate = getEndDateByCode(code);
 
+        LocalDateTime endDate = getEndDateByCode(code);
+        System.out.println("now : " + now + ", " + "end_date: " + endDate);
         // So sánh thời điểm hiện tại với thời điểm kết thúc voucher
-        return now.isAfter(endDate);
+        return endDate.isAfter(now);
     }
+
+    @Override
+    public Voucher findByCode(String code) {
+        Optional<Voucher> optionalVoucher = voucherRepository.findByCode(code);
+        return optionalVoucher.get();
+    }
+
     public LocalDateTime getEndDateByCode(String code) {
         Optional<LocalDateTime> endDateOptional = voucherRepository.findEndDateByCode(code);
         return endDateOptional.orElse(null); // Hoặc xử lý theo ý bạn khi không tìm thấy

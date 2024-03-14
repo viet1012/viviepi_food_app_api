@@ -6,15 +6,17 @@ import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.payload.response.ResponseOutput;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IVoucherService {
     ResponseObject getAll();
     List<String> getAllCode();
-    float getValueByCode(String code);
+    int getValueByCode(String code);
     VoucherDTO insert(VoucherDTO voucherDTO);
     void deleteVoucher();
     void deleteVoucherByCode(String code);
     Boolean existDiscount(VoucherDTO discountTypeDTO);
     Boolean isExpire(String code);
+    Voucher findByCode(String code);
 
 }

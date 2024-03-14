@@ -18,7 +18,12 @@ public class VoucherController {
 
     @Autowired
     private VoucherService voucherService;
+    @GetMapping("/get/voucher/by/code")
+    public ResponseEntity<?> getVoucherByCode ( @RequestParam(name = "codeVoucher", required = false) String codeVoucher){
+        return ResponseEntity.status(HttpStatus.OK).body(
+                voucherService.isExpire(codeVoucher));
 
+    }
     @GetMapping("/get/all")
     public ResponseEntity<?> getAllVoucher (){
         return ResponseEntity.status(HttpStatus.OK).body(
