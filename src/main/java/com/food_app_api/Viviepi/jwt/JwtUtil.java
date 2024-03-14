@@ -14,8 +14,9 @@ import java.util.Map;
 
 @Service
 public class JwtUtil {
-    private static final int TOKEN_EXPIRE_MILLIS = 8 * 60 * 60 * 1000;
-    private static final int REFRESH_TOKEN_EXPIRE_MILLIS = TOKEN_EXPIRE_MILLIS;
+    private static final int TOKEN_EXPIRE_MILLIS = 86400000;
+    // 1 ngày
+    private static final int REFRESH_TOKEN_EXPIRE_MILLIS = 604800000;
     private final static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
 

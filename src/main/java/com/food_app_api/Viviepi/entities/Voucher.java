@@ -20,11 +20,11 @@ public class Voucher {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "code")
+    @Column(name = "code", unique = true)
     private String code;
 
     @Column(name = "value")
-    private float value;
+    private long value;
 
     @Column(name = "start_date")
     private LocalDateTime start_date;

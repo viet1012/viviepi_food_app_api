@@ -59,7 +59,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                             );
 
 
-
                             System.out.println("Email: " + responseToken.getUsername());
                             System.out.println("Roles: " + roles);
                             SecurityContext contextHolder = SecurityContextHolder.getContext();

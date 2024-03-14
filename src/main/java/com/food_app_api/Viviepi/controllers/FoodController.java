@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/food")
+@RequestMapping("/food/api")
 public class FoodController {
 
     @Autowired
