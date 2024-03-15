@@ -20,7 +20,7 @@ public class BillMapper {
         billDTO.setDeliveryAddress(bill.getDeliveryAddress());
         billDTO.setDescription(bill.getDescription());
         billDTO.setStatus(bill.getStatus());
-        billDTO.setNameVoucher(bill.getVoucher().getCode());
+        billDTO.setNameVoucher(bill.getVoucher()!= null ? bill.getVoucher().getCode() : null);
         billDTO.setTotalPrice(bill.getTotalPrice());
         return billDTO;
     }
@@ -39,7 +39,7 @@ public class BillMapper {
         bill.setDeliveryAddress(billDTO.getDeliveryAddress());
         bill.setDescription(billDTO.getDescription());
         bill.setStatus(billDTO.getStatus());
-        bill.setVoucher(billDTO.getVoucher());
+        bill.setVoucher(billDTO.getVoucher()!= null ? billDTO.getVoucher() : null);
         bill.setTotalPrice(billDTO.getTotalPrice());
         return bill;
     }

@@ -42,7 +42,16 @@ public class FoodMapper {
                 .price(foodDTO.getPrice())
                 .build();
     }
-
+    public Food toFood(FoodDTO foodDTO) {
+        Food food = new Food();
+        food.setId(foodDTO.getId());
+        food.setName(foodDTO.getName());
+        food.setImgUrl(foodDTO.getImgUrl());
+        food.setDescription(foodDTO.getDescription());
+        food.setQuantity(foodDTO.getQuantity());
+        food.setPrice(foodDTO.getPrice());
+        return food;
+    }
     public Food toFood(FoodDTO foodDTO, Food food, Category category) {
         food.setId(foodDTO.getId());
         food.setName(foodDTO.getName());

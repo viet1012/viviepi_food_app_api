@@ -86,11 +86,23 @@ public class BillService implements IBillService {
     }
 
     @Override
-    public BillDTO getBillById(long id) {
+    public BillDTO getBillDTOById(long id) {
         Optional<Bill> billOptional = billRepository.findById(id);
         return billOptional.map(billMapper::toBillDTO).orElse(null);
     }
-
+    @Override
+    public Bill getBillById(long id) {
+        Optional<Bill> billOptional = billRepository.findById(id);
+        Bill bill = new Bill();
+        if(billOptional.isPresent())
+        {
+            bill  = billOptional.get();
+        }
+        else{
+            bill = null;
+        }
+        return bill;
+    }
     @Override
     public BillDTO updateBill(long id, BillDTO billDTO) {
         Optional<Bill> billOptional = billRepository.findById(id);

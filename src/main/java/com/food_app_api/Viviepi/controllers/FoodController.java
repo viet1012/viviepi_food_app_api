@@ -25,14 +25,14 @@ public class FoodController {
         return new ResponseEntity<>(responseObject, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all")
+    @GetMapping("/get/all")
     public ResponseEntity<ResponseObject> getAllFood() {
         List<FoodDTO> foods = foodService.getAllFood();
         ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(), "Successfully retrieved all foods", foods);
         return new ResponseEntity<>(responseObject, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<ResponseObject> getFoodById(@PathVariable Long id) {
         FoodDTO food = foodService.getFoodById(id);
         if (food != null) {
