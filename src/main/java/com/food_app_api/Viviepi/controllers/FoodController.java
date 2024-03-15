@@ -17,7 +17,13 @@ public class FoodController {
 
     @Autowired
     private IFoodService foodService;
+    @GetMapping("/get/category/{categoryId}")
+    public ResponseEntity<ResponseObject> getFoodsByCategoryId(@PathVariable Long categoryId) {
+        List<FoodDTO> foods = foodService.getFoodsByCategoryId(categoryId);
+        ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(), "All foods by category-id: "+ categoryId, foods);
 
+        return new ResponseEntity<>(responseObject, HttpStatus.OK);
+    }
 
     @GetMapping("/get-all")
     public ResponseEntity<ResponseObject> getAllFood() {
@@ -52,14 +58,14 @@ public class FoodController {
         return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ResponseObject> updateFood(@PathVariable Long id, @RequestBody FoodDTO foodDTO) {
         foodService.updateFood(id, foodDTO);
         ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(), "Food updated successfully", null);
         return new ResponseEntity<>(responseObject, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseObject> deleteFood(@PathVariable Long id) {
         foodService.deleteFood(id);
         ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(), "Food deleted successfully", null);

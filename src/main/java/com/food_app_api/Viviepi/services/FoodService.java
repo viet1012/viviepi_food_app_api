@@ -29,6 +29,13 @@ public class FoodService implements IFoodService {
     private UploadLocalUtil uploadLocalUtil;
 
     @Override
+    public List<FoodDTO> getFoodsByCategoryId(Long categoryId) {
+        List<Food> foods = foodRepository.findByCategoryId(categoryId);
+        return foodMapper.toFoodDTOList(foods);
+    }
+
+
+    @Override
     public List<FoodDTO> getAllFood() {
         List<Food> foods = foodRepository.findAll();
         return foodMapper.toFoodDTOList(foods);

@@ -9,6 +9,7 @@ import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.payload.response.ResponseSuccess;
 import com.food_app_api.Viviepi.services.AccountService;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,15 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @PostMapping("/test-token")
+    @Transactional(rollbackFor = Exception.class)
+    public String yourMethod(@RequestHeader("Authorization") String authorizationHeader, HttpServletRequest request) {
+        // Lấy token từ header Authorization
+        String token = authorizationHeader.substring("Bearer ".length());
+
+        return "Your response: " + token;
+    }
 
     @PostMapping("/sign-in")
     @Transactional(rollbackFor = Exception.class)

@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface IFoodRepository extends JpaRepository<Food, Long> {
+    List<Food> findByCategoryId(Long categoryId);
 
     List<Food> findFoodByName(String name);
     @Query("SELECT p FROM food p ORDER BY  p.price ASC ")

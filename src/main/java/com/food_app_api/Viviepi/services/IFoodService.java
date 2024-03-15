@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface IFoodService {
+    List<FoodDTO> getFoodsByCategoryId(Long categoryId);
 
     List<FoodDTO> getAllFood();
 
