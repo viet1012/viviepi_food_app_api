@@ -6,7 +6,7 @@ import com.food_app_api.Viviepi.entities.BillDetail;
 import java.util.List;
 
 public interface IBillDetailService {
-    List<BillDetail> findByBillId(Long billId);
+    List<BillDetailDTO> getBillDetailsByBillId(Long billId);
     List<BillDetailDTO> getAllBillDetail();
     BillDetailDTO createBillDetail(BillDetailDTO newBillDetail, Long billId, Long productId);
     BillDetail updateBillDetail(Long billDetailId, BillDetail updatedBillDetail);

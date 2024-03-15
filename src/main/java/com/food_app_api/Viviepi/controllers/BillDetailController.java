@@ -33,9 +33,13 @@ public class BillDetailController {
         );
     }
     @GetMapping("/get/details/{billId}")
-    public List<BillDetail> getBillDetailsByBillId(@PathVariable Long billId) {
-        System.out.println("Bill Id: " + billId);
-        return billDetailService.findByBillId(billId);
+    public ResponseEntity<ResponseObject> getBillDetailsByBillId(@PathVariable Long billId) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(200,
+                        "get all bill details  by bill id: " + billId +" completed !",
+                        billDetailService.getBillDetailsByBillId(billId)
+                )
+        );
     }
 
     @PostMapping("/insert")

@@ -34,8 +34,9 @@ public class BillDetailService implements  IBillDetailService{
     private FoodMapper foodMapper;
 
     @Override
-    public List<BillDetail> findByBillId(Long billId) {
-            return billDetailRepository.findByBillId(billId);
+    public List<BillDetailDTO> getBillDetailsByBillId(Long billId) {
+        List<BillDetail> billDetails = billDetailRepository.findByBillId(billId);
+        return billDetailMapper.toBillDetailDTOList(billDetails);
     }
 
     @Override
