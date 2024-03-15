@@ -2,6 +2,7 @@ package com.food_app_api.Viviepi.controllers;
 
 import com.food_app_api.Viviepi.dto.BillDTO;
 import com.food_app_api.Viviepi.dto.BillDetailDTO;
+import com.food_app_api.Viviepi.entities.BillDetail;
 import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.services.BillDetailService;
 import com.food_app_api.Viviepi.services.BillService;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/bill-detail/api")
@@ -29,6 +32,12 @@ public class BillDetailController {
                 )
         );
     }
+    @GetMapping("/get/details/{billId}")
+    public List<BillDetail> getBillDetailsByBillId(@PathVariable Long billId) {
+        System.out.println("Bill Id: " + billId);
+        return billDetailService.findByBillId(billId);
+    }
+
     @PostMapping("/insert")
     public  ResponseEntity<ResponseObject>  createBillDetail(@RequestBody BillDetailDTO newBillDetail,
                                           @RequestParam Long billId,
