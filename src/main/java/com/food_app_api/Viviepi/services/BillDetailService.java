@@ -14,6 +14,7 @@ import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,37 +47,46 @@ public class BillDetailService implements  IBillDetailService{
     }
 
     @Override
-    public BillDetailDTO createBillDetail(BillDetailDTO newBillDetail, Long billId, Long foodId) {
-        FoodDTO foodDTO = foodService.getFoodById( foodId);
+    public List<BillDetailDTO> createBillDetail(BillDetailDTO newBillDetail, Long billId) {
         Bill bill = billService.getBillById(billId);
-        BillDetail billDetail = new BillDetail();
-        if(foodDTO == null){
-            throw new IllegalArgumentException("Không tìm thấy sản phẩm!");
-        }
         if (bill == null) {
-            // Nếu không có sản phẩm hoặc bill ID, hoặc chúng không hợp lệ, bạn có thể xử lý lỗi ở đây
-            throw new IllegalArgumentException("Không tìm thấy sản phẩm hoặc id của hóa đơn phù hợp.");
-        }else
-        {
+            throw new IllegalArgumentException("Không tìm thấy hóa đơn phù hợp.");
+        }
+
+        double totalPriceIncrease = 0.0;
+        List<BillDetail> billDetails = new ArrayList<>();
+
+        for (Long foodId : newBillDetail.getFoodIds()) {
+            FoodDTO foodDTO = foodService.getFoodById(foodId);
+            if (foodDTO == null) {
+                throw new IllegalArgumentException("Không tìm thấy sản phẩm có id = " + foodId);
+            }
+
             double unitPrice = foodDTO.getPrice();
             int quantity = newBillDetail.getQuantity();
-            double newTotalPrice = bill.getTotalPrice() + (unitPrice * quantity);
-            bill.setTotalPrice(newTotalPrice);
-            billService.updateBill(billId,billMapper.toBillDTO(bill));
+            totalPriceIncrease += unitPrice * quantity;
 
             Food food = foodMapper.toFood(foodDTO);
+            BillDetail billDetail = new BillDetail();
             billDetail.setBill(bill);
             billDetail.setFood(food);
-
             billDetail.setPrice(unitPrice);
-            billDetail.setQuantity( newBillDetail.getQuantity());
-
-            BillDetail billDetail1 = billDetailRepository.save(billDetail);
-
-            return  billDetailMapper.toDTO(billDetail1);
-
+            billDetail.setQuantity(quantity);
+            billDetails.add(billDetail);
         }
+
+//        // Cập nhật tổng giá trị của hóa đơn
+//        double newTotalPrice = bill.getTotalPrice() + totalPriceIncrease;
+        bill.setTotalPrice(newBillDetail.getPrice());
+        billService.updateBill(billId, billMapper.toBillDTO(bill));
+
+        // Lưu danh sách chi tiết hóa đơn vào cơ sở dữ liệu
+        List<BillDetail> savedBillDetails = billDetailRepository.saveAll(billDetails);
+
+        // Chuyển đổi danh sách các chi tiết hóa đơn đã lưu thành DTO và trả về
+        return billDetailMapper.toBillDetailDTOList(savedBillDetails);
     }
+
 
     @Override
     public BillDetail updateBillDetail(Long billDetailId, BillDetail updatedBillDetail) {

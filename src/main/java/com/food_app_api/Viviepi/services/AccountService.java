@@ -266,7 +266,7 @@ public class AccountService implements IAccountService{
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public String setPassword(ResetPasswordDTO resetPasswordDTO) {
+    public String  setPassword(ResetPasswordDTO resetPasswordDTO) {
         Optional<User> optionalUser = userRepository.findByEmail(resetPasswordDTO.getEmail());
         User user = optionalUser.get();
         if (optionalUser.isEmpty()){

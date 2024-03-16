@@ -44,10 +44,9 @@ public class BillDetailController {
 
     @PostMapping("/insert")
     public  ResponseEntity<ResponseObject>  createBillDetail(@RequestBody BillDetailDTO newBillDetail,
-                                          @RequestParam Long billId,
-                                          @RequestParam Long foodId ) {
+                                          @RequestParam Long billId) {
         try {
-            BillDetailDTO createdBillDetail =  billDetailService.createBillDetail(newBillDetail, billId, foodId );
+            List<BillDetailDTO> createdBillDetail =  billDetailService.createBillDetail(newBillDetail, billId);
             return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseObject(
                     201,"insert bill detail completed", createdBillDetail
             ));

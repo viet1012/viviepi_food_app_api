@@ -8,6 +8,6 @@ import java.util.List;
 public interface IBillDetailService {
     List<BillDetailDTO> getBillDetailsByBillId(Long billId);
     List<BillDetailDTO> getAllBillDetail();
-    BillDetailDTO createBillDetail(BillDetailDTO newBillDetail, Long billId, Long productId);
+    List<BillDetailDTO> createBillDetail(BillDetailDTO newBillDetail, Long billId);
     BillDetail updateBillDetail(Long billDetailId, BillDetail updatedBillDetail);
 }
