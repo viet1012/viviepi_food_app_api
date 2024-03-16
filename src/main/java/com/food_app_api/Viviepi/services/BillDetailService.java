@@ -56,28 +56,26 @@ public class BillDetailService implements  IBillDetailService{
         double totalPriceIncrease = 0.0;
         List<BillDetail> billDetails = new ArrayList<>();
 
-        for (Long foodId : newBillDetail.getFoodIds()) {
-            FoodDTO foodDTO = foodService.getFoodById(foodId);
+        for (FoodDTO foodItem : newBillDetail.getFoodDTOS()) {
+            FoodDTO foodDTO = foodService.getFoodById(foodItem.getId());
             if (foodDTO == null) {
-                throw new IllegalArgumentException("Không tìm thấy sản phẩm có id = " + foodId);
+                throw new IllegalArgumentException("Không tìm thấy sản phẩm có id = " + foodItem.getId());
             }
-
             double unitPrice = foodDTO.getPrice();
-            int quantity = newBillDetail.getQuantity();
-            totalPriceIncrease += unitPrice * quantity;
-
+//            int quantity = newBillDetail.getQuantity();
+//            totalPriceIncrease += unitPrice * quantity;
             Food food = foodMapper.toFood(foodDTO);
             BillDetail billDetail = new BillDetail();
             billDetail.setBill(bill);
             billDetail.setFood(food);
             billDetail.setPrice(unitPrice);
-            billDetail.setQuantity(quantity);
+            billDetail.setQuantity(foodItem.getQuantity());
             billDetails.add(billDetail);
         }
 
 //        // Cập nhật tổng giá trị của hóa đơn
 //        double newTotalPrice = bill.getTotalPrice() + totalPriceIncrease;
-        bill.setTotalPrice(newBillDetail.getPrice());
+        bill.setTotalPrice(newBillDetail.getTotal_price());
         billService.updateBill(billId, billMapper.toBillDTO(bill));
 
         // Lưu danh sách chi tiết hóa đơn vào cơ sở dữ liệu

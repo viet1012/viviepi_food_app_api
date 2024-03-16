@@ -15,10 +15,11 @@ import java.util.List;
 public class BillDetailDTO {
     private Long id;
     private Long billId;
-    List<Long> foodIds;
     private Long foodId;
     private Integer quantity;
-    private Double price;
+    private Double total_price;
     private Bill bill;
     private Food food;
+    List<Long> foodIds;
+    List<FoodDTO> foodDTOS;
 }

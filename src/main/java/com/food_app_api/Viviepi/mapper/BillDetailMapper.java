@@ -15,7 +15,7 @@ public class BillDetailMapper {
                 .billId(billDetail.getBill().getId())
                 .foodId(billDetail.getFood() != null ? billDetail.getFood().getId() : null)
                 .quantity(billDetail.getQuantity())
-                .price(billDetail.getPrice())
+                .total_price(billDetail.getPrice())
                 .build();
     }
     public BillDetail toBill(BillDetailDTO billDetailDTO) {
@@ -23,7 +23,7 @@ public class BillDetailMapper {
         billDetail.setId(billDetailDTO.getId());
         billDetail.setBill(billDetailDTO.getBill());
         billDetail.setFood(billDetailDTO.getFood());
-        billDetail.setPrice(billDetailDTO.getPrice());
+        billDetail.setPrice(billDetailDTO.getTotal_price());
         billDetail.setQuantity(billDetailDTO.getQuantity());
         return billDetail;
     }
