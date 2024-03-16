@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class BillDTO {
     private long id;
     private User user;
+    private long userId;
     private String username;
     private LocalDateTime date;
     private String name;

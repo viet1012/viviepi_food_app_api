@@ -12,7 +12,7 @@ public interface IBillService {
 
     BillDTO getBillDTOById(long id);
     Bill getBillById(long id);
-
+    List<BillDTO> getBillByUserId(long userID);
     BillDTO updateBill(long id, BillDTO billDTO);
 
     void deleteBill(long id);

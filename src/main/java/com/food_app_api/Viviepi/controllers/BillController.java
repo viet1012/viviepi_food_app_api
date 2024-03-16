@@ -17,7 +17,7 @@ public class BillController {
     private BillService billService;
     @GetMapping("/get/all")
     @Transactional(readOnly = true)
-    public ResponseEntity<ResponseObject>getAllUser(){
+    public ResponseEntity<ResponseObject>getAllBill(){
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(200,
                         "get all bills completed !",
@@ -25,7 +25,16 @@ public class BillController {
                 )
         );
     }
-
+    @GetMapping("/get/all/by/user-id/{userId}")
+    @Transactional(readOnly = true)
+    public ResponseEntity<ResponseObject>getAllBillByUserId(@PathVariable long userId){
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(200,
+                        "get all bills completed !",
+                        billService.getBillByUserId(userId)
+                )
+        );
+    }
     @PostMapping("/insert")
     public ResponseEntity<ResponseObject> createBill(@RequestBody BillDTO billDTO,
                                               @RequestParam(name = "codeVoucher", required = false) String codeVoucher,

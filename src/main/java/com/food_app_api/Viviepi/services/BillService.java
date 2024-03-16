@@ -103,6 +103,14 @@ public class BillService implements IBillService {
         }
         return bill;
     }
+
+    @Override
+    public List<BillDTO> getBillByUserId(long userID) {
+        List<Bill> bills = billRepository.findByUserId(userID);
+        return billMapper.toBillDTOList(bills);
+
+    }
+
     @Override
     public BillDTO updateBill(long id, BillDTO billDTO) {
         Optional<Bill> billOptional = billRepository.findById(id);

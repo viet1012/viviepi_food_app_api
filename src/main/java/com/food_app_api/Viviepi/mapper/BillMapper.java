@@ -13,6 +13,7 @@ public class BillMapper {
     public BillDTO toBillDTO(Bill bill) {
         BillDTO billDTO = new BillDTO();
         billDTO.setId(bill.getId());
+        billDTO.setUserId(bill.getUser().getId());
         billDTO.setUsername(bill.getUser().getEmail());
         billDTO.setDate(bill.getDate());
         billDTO.setName(bill.getName());
