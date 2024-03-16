@@ -75,7 +75,7 @@ public class BillDetailService implements  IBillDetailService{
 
 //        // Cập nhật tổng giá trị của hóa đơn
 //        double newTotalPrice = bill.getTotalPrice() + totalPriceIncrease;
-        bill.setTotalPrice(newBillDetail.getTotal_price());
+        //bill.setTotalPrice(newBillDetail.getTotal_price());
         billService.updateBill(billId, billMapper.toBillDTO(bill));
 
         // Lưu danh sách chi tiết hóa đơn vào cơ sở dữ liệu

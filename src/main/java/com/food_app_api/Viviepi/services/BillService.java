@@ -62,18 +62,20 @@ public class BillService implements IBillService {
             billDTO.setVoucher(voucher);
             // Apply voucher logic here (e.g., update total price of bill)
             // ship = 20.000
-            double curTotalPrice = billDTO.getTotalPrice() - voucher.getValue() + 20000;
-            if(curTotalPrice < 0)
-            {
-                billDTO.setTotalPrice(0);
-
-            }else {
-                billDTO.setTotalPrice(curTotalPrice);
-            }
+//            double curTotalPrice = billDTO.getTotalPrice() - voucher.getValue() + 20000;
+//            if(curTotalPrice < 0)
+//            {
+//                billDTO.setTotalPrice(0);
+//
+//            }else {
+//                billDTO.setTotalPrice(curTotalPrice);
+//            }
         }
         else {
-            billDTO.setTotalPrice(billDTO.getTotalPrice());
+            throw  new RuntimeException("Voucher is not valid!");
+//            billDTO.setTotalPrice(billDTO.getTotalPrice());
         }
+        billDTO.setTotalPrice(billDTO.getTotalPrice());
 
         Bill bill = billMapper.toBill(billDTO);
         return billMapper.toBillDTO(billRepository.save(bill));

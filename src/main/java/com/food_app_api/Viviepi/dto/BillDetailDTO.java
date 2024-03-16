@@ -17,9 +17,9 @@ public class BillDetailDTO {
     private Long billId;
     private Long foodId;
     private Integer quantity;
-    private Double total_price;
     private Bill bill;
     private Food food;
+    private double price;
     List<Long> foodIds;
     List<FoodDTO> foodDTOS;
 }
