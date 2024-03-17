@@ -1,9 +1,11 @@
 package com.food_app_api.Viviepi.controllers;
 
 import com.food_app_api.Viviepi.dto.CategoryDTO;
+import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.payload.response.ResponseOutput;
 import com.food_app_api.Viviepi.services.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,10 +52,12 @@ public class CategoryController {
         return ResponseEntity.ok(categoryNames);
     }
 
-    @PostMapping("/upsert")
-    public ResponseEntity<CategoryDTO> upsertCategory(@RequestBody CategoryDTO categoryDTO) {
-        CategoryDTO result = categoryService.upsert(categoryDTO);
-        return ResponseEntity.ok(result);
+    @PostMapping("/insert")
+    public ResponseEntity<ResponseObject> savedCategory(@RequestParam(value = "file",required = false) MultipartFile file  , @ModelAttribute  CategoryDTO categoryDTO) {
+        categoryService.insert(categoryDTO,file);
+        ResponseObject responseObject = new ResponseObject(HttpStatus.CREATED.value(), "Category saved successfully", null);
+        return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
+
     }
 
     @DeleteMapping("/delete")
@@ -64,11 +68,7 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadCategoryImages(@RequestParam("file") MultipartFile file) {
-        String fileName = categoryService.uploadCategoryImages(file);
-        return ResponseEntity.ok(fileName);
-    }
+
 
     @PostMapping("/upload-local")
     public ResponseEntity<String> uploadLocalCategoryImages(@RequestParam("file") MultipartFile file) {

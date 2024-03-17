@@ -18,8 +18,8 @@ public class VerificationToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "token")
-    private String token;
+    @Column(name = "otp")
+    private String otp;
     @Column(name = "expired_time")
     private Date expirationTime;
     private static final int EXPIRATION_TIME = 15;
@@ -28,14 +28,14 @@ public class VerificationToken {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public VerificationToken(String token, User user) {
-        this.token = token;
+    public VerificationToken(String otp, User user) {
+        this.otp = otp;
         this.user = user;
         this.expirationTime = getTokenExpirationTime();
     }
 
-    public VerificationToken(String token) {
-        this.token = token;
+    public VerificationToken(String otp) {
+        this.otp = otp;
         this.expirationTime = getTokenExpirationTime();
     }
 

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IVerificationTokenRepository extends JpaRepository<VerificationToken, Long> {
-    VerificationToken findByToken(String token);
+    VerificationToken findByOtp(String token);
 }

@@ -15,7 +15,8 @@ public interface ICategoryService {
     List<CategoryDTO> getAllCategoryCode(CategoryDTO categoryDTO);
     List<CategoryDTO> searchAllByName(String name);
     List<String> getAllNameByCategory();
-    CategoryDTO upsert(CategoryDTO categoryDTO);
+    void insert(CategoryDTO categoryDTO, MultipartFile imageFile);
+    void update(CategoryDTO categoryDTO, long id);
     void deleteCategory(CategoryDTO categoryDTO);
     Boolean exitsCategory(CategoryDTO categoryDTO);
     String uploadCategoryImages(MultipartFile fileName);

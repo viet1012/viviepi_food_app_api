@@ -8,6 +8,7 @@ import com.food_app_api.Viviepi.payload.request.SignUpRequest;
 import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.payload.response.ResponseSuccess;
 import com.food_app_api.Viviepi.services.AccountService;
+import com.food_app_api.Viviepi.util.EmailUtil;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -28,6 +29,10 @@ import java.io.UnsupportedEncodingException;
 @AllArgsConstructor
 @CrossOrigin
 public class AuthController {
+
+    @Autowired
+    EmailUtil emailUtil;
+
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -39,6 +44,12 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+    @PostMapping("/test-email")
+    @Transactional(rollbackFor = Exception.class)
+    public void demoEmail(@RequestParam("email") String email ) throws MessagingException, UnsupportedEncodingException {
+            emailUtil.sendVerificationEmail(email, "phat ngu ");
+
+    }
 
     @PostMapping("/test-token")
     @Transactional(rollbackFor = Exception.class)

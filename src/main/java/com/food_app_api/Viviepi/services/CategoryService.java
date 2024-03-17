@@ -13,7 +13,6 @@ import com.food_app_api.Viviepi.util.UploadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,8 +27,7 @@ import java.util.List;
 public class CategoryService implements ICategoryService {
 
     private final ICategoryRepository categoryRepository;
-    private final CategoryMapper categoryConverter;
-
+    private final CategoryMapper categoryMapper;
     private final UploadLocalUtil uploadLocalUtil;
 
 
@@ -38,7 +36,7 @@ public class CategoryService implements ICategoryService {
                            final CategoryMapper categoryConverter,
                            final UploadLocalUtil uploadLocalUtil) {
         this.categoryRepository = categoryRepository;
-        this.categoryConverter = categoryConverter;
+        this.categoryMapper = categoryConverter;
         this.uploadLocalUtil = uploadLocalUtil;
     }
 
@@ -57,13 +55,13 @@ public class CategoryService implements ICategoryService {
             );
         }
         log.info("Get all category successfully !");
-        return categoryConverter.toCategoryDTOList(categoryList);
+        return categoryMapper.toCategoryDTOList(categoryList);
     }
 
     @Override
     public ResponseOutput getAllCategory(int page, int limit, String sortBy, String sortField) {
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(Sort.Direction.fromString(sortBy), sortField));
-        List<CategoryDTO> categoryDTOList = categoryConverter.toCategoryDTOList(
+        List<CategoryDTO> categoryDTOList = categoryMapper.toCategoryDTOList(
                 categoryRepository.findAll(pageable).getContent()
         );
         if (categoryDTOList.isEmpty()){
@@ -87,12 +85,12 @@ public class CategoryService implements ICategoryService {
     @Transactional(readOnly = true)
     public List<CategoryDTO> getAllCategoryCode(CategoryDTO categoryDTO) {
         List<Category> category = categoryRepository.findByCategoryCode(categoryDTO.getCategoryCode());
-        return categoryConverter.toCategoryDTOList(category);
+        return categoryMapper.toCategoryDTOList(category);
     }
 
     @Override
     public List<CategoryDTO> searchAllByName(String name) {
-        return categoryConverter.toCategoryDTOList(
+        return categoryMapper.toCategoryDTOList(
                 categoryRepository.searchAllByNameContainingIgnoreCase(name)
         );
     }
@@ -110,29 +108,25 @@ public class CategoryService implements ICategoryService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public CategoryDTO upsert(CategoryDTO categoryDTO) {
-        Category category;
-        if (categoryDTO.getId() != null){
-            boolean exist = exitsCategory(categoryDTO);
-            if (!exist){
-                log.info("Cannot update category id: "+categoryDTO.getId());
-                throw new ObjectNotFoundException(
-                        404, "Cannot update category id: "+categoryDTO.getId()
-                );
-            }
-            Category oldCategory = categoryRepository.findOneById(categoryDTO.getId());
-            category = categoryConverter.toCategory(categoryDTO, oldCategory);
-            log.info("Update category is completed !");
-        }else {
-            List<Category> categoryList = categoryConverter.toCategoryList(getAllCategoryCode(categoryDTO));
-            if (!categoryList.isEmpty()){
-                log.info("Category code is duplicated !");
+    public void insert (CategoryDTO categoryDTO, MultipartFile file ) {
+        String fileName = "";
+        if( file != null )
+        {
+            fileName = uploadLocalUtil.storeFile(file, "category");
 
-            }
-            category = categoryConverter.toCategory(categoryDTO);
-            log.info("Insert category is completed !");
         }
-        return categoryConverter.toCategoryDTO(categoryRepository.save(category));
+        Category category = categoryMapper.toCategory(categoryDTO);
+        category.setBannerUrl(fileName);
+         categoryRepository.save(category);
+    }
+
+    @Override
+    public void update(CategoryDTO categoryDTO, long id) {
+        Category existingFood = categoryRepository.findById(id).orElse(null);
+
+        if (existingFood != null) {
+            categoryRepository.save(categoryMapper.toCategory(categoryDTO));
+        }
     }
 
     @Override
@@ -161,8 +155,13 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public String uploadLocalCategoryImages(MultipartFile fileName) {
-        return null;
+    public String uploadLocalCategoryImages(MultipartFile file) {
+        String fileName = "";
+        if( file != null )
+        {
+            fileName = uploadLocalUtil.storeFile(file, "category");
+        }
+        return fileName;
     }
 
     @Override

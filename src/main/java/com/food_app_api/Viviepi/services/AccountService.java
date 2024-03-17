@@ -133,7 +133,7 @@ public class AccountService implements IAccountService{
         );
 
         VerificationToken verificationToken = new VerificationToken(verifyCode.substring(0, 6), user);
-        userSignUpDTO.setToken(verificationToken.getToken());
+        userSignUpDTO.setToken(verificationToken.getOtp());
         this.verificationTokenRepository.save(verificationToken);
         //save cái dto converter đã xử lý xuống database
         this.roleUserRepository.save(
@@ -209,12 +209,12 @@ public class AccountService implements IAccountService{
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String verifyEmail(UserSignUpDTO signUpDTO) {
-        VerificationToken verificationToken = verificationTokenRepository.findByToken(signUpDTO.getToken());
+        VerificationToken verificationToken = verificationTokenRepository.findByOtp(signUpDTO.getToken());
         if (verificationToken.getUser().getIsActive()){
             System.out.println("This account has already been verified, please login!");
             return "This account has already been verified, please, login.";
         }
-        String verificationResult = validateToken(signUpDTO.getToken());
+        String verificationResult = validateOTP(signUpDTO.getToken());
         if (verificationResult.equalsIgnoreCase("Valid")){
             System.out.println("Email verified successfully. Now you can login to your account");
             return "Email verified successfully. Now you can login to your account";
@@ -223,8 +223,8 @@ public class AccountService implements IAccountService{
         return "Invalid verification token !";
     }
 
-    public String validateToken(String verifyToken) {
-        VerificationToken verificationToken = verificationTokenRepository.findByToken(verifyToken);
+    public String validateOTP(String verifyToken) {
+        VerificationToken verificationToken = verificationTokenRepository.findByOtp(verifyToken);
         if(verificationToken == null){
             System.out.println("Invalid verification token !");
             throw new VerificationTokenException(500, "Invalid verification token !");
@@ -273,7 +273,7 @@ public class AccountService implements IAccountService{
             System.out.println("User not exist !");
             throw new UserNotFoundException(404, "User not exist !");
         }
-        String verificationResult = validateTokenReset(resetPasswordDTO.getToken());
+        String verificationResult = validateTokenReset(resetPasswordDTO.getOtp());
         if (verificationResult.equalsIgnoreCase("valid")) {
             user.setPassword(this.passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
             this.userRepository.save(user);
@@ -284,14 +284,14 @@ public class AccountService implements IAccountService{
         return "Set new password successfully !";
     }
 
-    public String validateTokenReset(String verifyToken) {
-        VerificationToken tokenReset = verificationTokenRepository.findByToken(verifyToken);
+    public String validateTokenReset(String verifyOTP) {
+        VerificationToken tokenReset = verificationTokenRepository.findByOtp(verifyOTP);
         if(tokenReset == null){
             System.out.println("Invalid verification token !");
             throw new VerificationTokenException(500, "Invalid verification token !");
         }
         Calendar calendar = Calendar.getInstance();
-        if ((tokenReset.getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0){
+        if ((calendar.getTime().getTime() - tokenReset.getExpirationTime().getTime()) <= 0){
             verificationTokenRepository.delete(tokenReset);
             System.out.println("Token already expired !");
             throw new VerificationTokenException(500, "Token already expired !");
