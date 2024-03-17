@@ -1,6 +1,7 @@
 package com.food_app_api.Viviepi.controllers;
 
 import com.food_app_api.Viviepi.dto.CategoryDTO;
+import com.food_app_api.Viviepi.dto.FoodDTO;
 import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.payload.response.ResponseOutput;
 import com.food_app_api.Viviepi.services.ICategoryService;
@@ -23,10 +24,11 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/get-all")
-    public ResponseEntity<List<CategoryDTO>> getAllCategories() {
+    @GetMapping("/get/all")
+    public ResponseEntity<ResponseObject> getAllCategories() {
         List<CategoryDTO> categories = categoryService.getAllCategory();
-        return ResponseEntity.ok(categories);
+        ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(), "Successfully retrieved all categories", categories);
+        return new ResponseEntity<>(responseObject, HttpStatus.OK);
     }
 
     @GetMapping("/paged")
