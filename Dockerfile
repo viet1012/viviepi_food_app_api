@@ -19,7 +19,7 @@
 # Stage 1: Sử dụng Maven để build ứng dụng
 FROM maven:latest AS build
 # Cập nhật gói và cài đặt OpenJDK 17 (nếu cần)
-RUN apt-get update && apt-get install -y openjdk-17-jdk
+RUN apt-get update && apt-get install -y openjdk-19-jdk
 # Sao chép mã nguồn vào thư mục /usr/src/app trong container
 COPY . /usr/src/app
 # Thiết lập thư mục làm việc mặc định
