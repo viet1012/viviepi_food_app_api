@@ -2,6 +2,7 @@ package com.food_app_api.Viviepi.services;
 
 
 import com.food_app_api.Viviepi.dto.ResetPasswordDTO;
+import com.food_app_api.Viviepi.dto.UserDTO;
 import com.food_app_api.Viviepi.dto.UserSignUpDTO;
 import com.food_app_api.Viviepi.dto.token.RefreshTokenDTO;
 import com.food_app_api.Viviepi.payload.request.SignInRequest;
@@ -16,6 +17,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.cert.CertificateException;
 
 public interface IAccountService {
+
+    UserDTO getUserInfo(String token);
     boolean checkEmailExists(String email);
     RefreshTokenDTO refreshToken(HttpServletRequest request, HttpServletResponse response) throws CertificateException;
     @Transactional(rollbackFor = Exception.class)

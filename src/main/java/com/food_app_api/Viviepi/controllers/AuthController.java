@@ -1,6 +1,7 @@
 package com.food_app_api.Viviepi.controllers;
 
 import com.food_app_api.Viviepi.dto.ResetPasswordDTO;
+import com.food_app_api.Viviepi.dto.UserDTO;
 import com.food_app_api.Viviepi.exceptions.AlreadyExistException;
 import com.food_app_api.Viviepi.jwt.JwtUtil;
 import com.food_app_api.Viviepi.payload.request.SignInRequest;
@@ -44,11 +45,16 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
-    @PostMapping("/test-email")
-    @Transactional(rollbackFor = Exception.class)
-    public void demoEmail(@RequestParam("email") String email ) throws MessagingException, UnsupportedEncodingException {
-            emailUtil.sendVerificationEmail(email, "phat ngu ");
 
+    @PostMapping("/get/info")
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<ResponseObject> getInfoUser(@RequestHeader("Authorization") String authorizationHeader, HttpServletRequest request) {
+        // Lấy token từ header Authorization
+        String token = authorizationHeader.substring("Bearer ".length());
+        UserDTO userDTO = accountService.getUserInfo(token);
+        ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(), "Info User: ", userDTO);
+
+        return new ResponseEntity<>(responseObject, HttpStatus.OK);
     }
 
     @PostMapping("/test-token")

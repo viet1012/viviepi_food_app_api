@@ -2,6 +2,7 @@ package com.food_app_api.Viviepi.services;
 
 import com.food_app_api.Viviepi.dto.ResetPasswordDTO;
 import com.food_app_api.Viviepi.dto.RolesUsersDTO;
+import com.food_app_api.Viviepi.dto.UserDTO;
 import com.food_app_api.Viviepi.dto.UserSignUpDTO;
 import com.food_app_api.Viviepi.dto.token.RefreshTokenDTO;
 import com.food_app_api.Viviepi.entities.Role;
@@ -83,6 +84,22 @@ public class AccountService implements IAccountService{
 
     @Autowired
     Gson gson = new Gson();
+
+
+    @Override
+    public UserDTO getUserInfo(String token) {
+        UserDTO userDTO = new UserDTO();
+        if (jwtUtil.validationToke(token)) {
+            final String data = jwtUtil.parserToken(token);
+            ResponseToken responseToken = gson.fromJson(data, ResponseToken.class);
+            Optional<User> optionalUser = userRepository.findByEmail(responseToken.getUsername());
+            User user = optionalUser.get();
+            userDTO = userMapper.toUserDTO(user);
+        }else {
+            System.out.println("Token is not valid!");
+        }
+        return userDTO;
+    }
 
     @Override
     public boolean checkEmailExists(String email) {
