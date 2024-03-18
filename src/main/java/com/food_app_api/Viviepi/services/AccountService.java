@@ -89,12 +89,15 @@ public class AccountService implements IAccountService{
     @Override
     public UserDTO getUserInfo(String token) {
         UserDTO userDTO = new UserDTO();
+        String name= "";
         if (jwtUtil.validationToke(token)) {
             final String data = jwtUtil.parserToken(token);
             ResponseToken responseToken = gson.fromJson(data, ResponseToken.class);
+            System.out.println("Username info : " +  responseToken.getUsername());
             Optional<User> optionalUser = userRepository.findByEmail(responseToken.getUsername());
             User user = optionalUser.get();
             userDTO = userMapper.toUserDTO(user);
+            name = responseToken.getUsername();
         }else {
             System.out.println("Token is not valid!");
         }

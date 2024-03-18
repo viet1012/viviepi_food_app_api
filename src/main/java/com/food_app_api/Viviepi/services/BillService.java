@@ -53,7 +53,7 @@ public class BillService implements IBillService {
             User user = optionalUser.get();
             billDTO.setUser(user);
         }else {
-            System.out.println("Token is not valid!");
+           throw new RuntimeException("Token is not valid!");
         }
 
         Voucher voucher = voucherService.findByCode(codeVoucher);

@@ -5,6 +5,7 @@ import com.food_app_api.Viviepi.dto.ResetPasswordDTO;
 import com.food_app_api.Viviepi.dto.UserDTO;
 import com.food_app_api.Viviepi.dto.UserSignUpDTO;
 import com.food_app_api.Viviepi.dto.token.RefreshTokenDTO;
+import com.food_app_api.Viviepi.entities.User;
 import com.food_app_api.Viviepi.payload.request.SignInRequest;
 import com.food_app_api.Viviepi.payload.request.SignUpRequest;
 import com.food_app_api.Viviepi.payload.response.ResponseObject;

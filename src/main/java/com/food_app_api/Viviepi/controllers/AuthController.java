@@ -46,11 +46,12 @@ public class AuthController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @PostMapping("/get/info")
+    @GetMapping("/get/info")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<ResponseObject> getInfoUser(@RequestHeader("Authorization") String authorizationHeader, HttpServletRequest request) {
+    public ResponseEntity<ResponseObject> getInfoUser(@RequestHeader("Authorization") String authorization) {
         // Lấy token từ header Authorization
-        String token = authorizationHeader.substring("Bearer ".length());
+        String token = authorization.substring("Bearer ".length());
+        System.out.println("token " + token);
         UserDTO userDTO = accountService.getUserInfo(token);
         ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(), "Info User: ", userDTO);
 
