@@ -71,4 +71,9 @@ public class FoodController {
         ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(), "Food deleted successfully", null);
         return new ResponseEntity<>(responseObject, HttpStatus.OK);
     }
+    @GetMapping("/image/{fileName}")
+    public ResponseEntity<byte[]> readImageUrl(@PathVariable String fileName) {
+        byte[] imageContent = foodService.readImageUrl(fileName);
+        return ResponseEntity.ok(imageContent);
+    }
 }
