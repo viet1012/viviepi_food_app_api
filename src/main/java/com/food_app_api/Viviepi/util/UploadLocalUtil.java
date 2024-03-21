@@ -86,6 +86,8 @@ public class UploadLocalUtil {
             String pathFolder = rootPath+folderName;
             Path storageFolder = Paths.get(pathFolder);
             Path file = storageFolder.resolve(fileName);
+            System.out.println("PATH FILE:  "  + file);
+
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return StreamUtils.copyToByteArray(resource.getInputStream());
