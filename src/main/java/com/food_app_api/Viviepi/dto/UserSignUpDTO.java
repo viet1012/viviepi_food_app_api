@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 public class UserSignUpDTO {
+    private String userId;
     private String fullName;
     @Pattern(regexp = "^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9.-]+$", message = "Please enter the correct email format!" )
     @NotNull(message = "Please fill all information!")

@@ -23,6 +23,7 @@ import com.food_app_api.Viviepi.payload.request.SignUpRequest;
 import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.repositories.*;
 import com.food_app_api.Viviepi.util.EmailUtil;
+import com.food_app_api.Viviepi.util.UUIDUtil;
 import com.google.gson.Gson;
 import jakarta.mail.MessagingException;
 import org.hibernate.ObjectNotFoundException;
@@ -83,6 +84,9 @@ public class AccountService implements IAccountService{
     private  EmailUtil emailUtil;
 
     @Autowired
+    private UUIDUtil uuidUtil;
+
+    @Autowired
     Gson gson = new Gson();
 
 
@@ -141,7 +145,7 @@ public class AccountService implements IAccountService{
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setIsActive(true);
-
+        user.setUserId(uuidUtil.generateUUID());
         Role role = roleRepository.findOneByName(request.getRoleName());
         System.out.println("Name role : " + role.getName());
 

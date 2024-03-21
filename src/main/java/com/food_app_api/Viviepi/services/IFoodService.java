@@ -19,4 +19,6 @@ public interface IFoodService {
     void updateFood(Long id, FoodDTO foodDTO);
 
     void deleteFood(Long id);
+    byte[] readImageUrl(String fileName);
+
 }

@@ -15,6 +15,7 @@ public class UserMapper {
     public UserDTO userToUserDTO(User user){
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail(user.getEmail());
+        userDTO.setUserID(user.getUserId());
         userDTO.setPassword(user.getPassword());
         userDTO.setFullName(user.getFullname());
         userDTO.setPhone(user.getPhoneNumber());
@@ -26,6 +27,7 @@ public class UserMapper {
 
     public UserSignUpDTO userSignUpToUserSignUpDTO(User user){
         UserSignUpDTO userSignUpDTO = new UserSignUpDTO();
+        userSignUpDTO.setUserId(user.getUserId());
         userSignUpDTO.setFullName(user.getFullname());
         userSignUpDTO.setEmail(user.getEmail());
         userSignUpDTO.setPassword(user.getPassword());

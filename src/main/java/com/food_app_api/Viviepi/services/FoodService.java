@@ -80,6 +80,12 @@ public class FoodService implements IFoodService {
         foodRepository.deleteById(id);
     }
 
+    @Override
+    public byte[] readImageUrl(String fileName) {
+        String folderName = "food";
+        return uploadLocalUtil.readFileContent(fileName, folderName);
+    }
+
     private Category getCategoryById(Long categoryId) {
         return categoryRepository.findOneById(categoryId);
     }

@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
+import java.util.UUID;
 
 
 @RestController
@@ -63,8 +64,9 @@ public class AuthController {
     public String yourMethod(@RequestHeader("Authorization") String authorizationHeader, HttpServletRequest request) {
         // Lấy token từ header Authorization
         String token = authorizationHeader.substring("Bearer ".length());
+        UUID uuid = UUID.randomUUID();
 
-        return "Your response: " + token;
+        return "Your response: " + token + "UUID: " + uuid ;
     }
 
     @PostMapping("/sign-in")
