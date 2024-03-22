@@ -113,13 +113,13 @@ public class AuthController {
 
     @PostMapping("/api/forgot_password")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<ResponseObject> forgotPassword(@RequestParam String email) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<ResponseObject> forgotPassword(@RequestBody ResetPasswordDTO resetPasswordDTOl) throws MessagingException, UnsupportedEncodingException {
         System.out.println("Send reset password is completed !");
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(
                         200,
                         "Send reset password is completed !",
-                        this.accountService.forgotPassword(email)
+                        this.accountService.forgotPassword(resetPasswordDTOl.getEmail())
                 )
         );
     }
