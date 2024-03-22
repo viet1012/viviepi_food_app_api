@@ -42,7 +42,9 @@ public class UploadLocalUtil {
             if(fileSizeInMegabytes > 5.0f) {
                 throw new RuntimeException("File must be <= 5Mb");
             }
-            String pathFolder = rootPath + folderName;
+          //  String pathFolder = rootPath + folderName;
+            String rootPath = System.getProperty("user.home") + "/Downloads/viviepi/public";
+            String pathFolder = rootPath + "/" + folderName;
             Path storageFolder = Paths.get(pathFolder);
             if (!(Files.exists(storageFolder))){
                 Files.createDirectories(storageFolder);
