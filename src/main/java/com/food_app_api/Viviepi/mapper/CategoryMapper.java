@@ -20,7 +20,6 @@ public class CategoryMapper {
                 .categoryCode(category.getCategoryCode() != null ? category.getCategoryCode() : "DefaultCategoryCode")
                 .name(category.getName() != null ? category.getName() : "DefaultName")
                 .bannerUrl(category.getBannerUrl() != null ? category.getBannerUrl() : "DefaultBannerUrl")
-
                 .build();
     }
 
@@ -34,14 +33,14 @@ public class CategoryMapper {
                 .categoryCode(categoryDTO.getCategoryCode())
                 .name(categoryDTO.getName())
                 .bannerUrl(categoryDTO.getBannerUrl())
-
                 .build();
     }
 
-    public Category toCategory(CategoryDTO categoryDTO, Category Category){
-        Category.setName(categoryDTO.getName());
-        Category.setBannerUrl(categoryDTO.getBannerUrl());
-        return Category;
+    public Category toCategory(CategoryDTO categoryDTO, Category category){
+        category.setName(categoryDTO.getName() != null ? categoryDTO.getName() :  category.getName());
+        category.setCategoryCode(categoryDTO.getCategoryCode() != null? categoryDTO.getCategoryCode() : category.getCategoryCode() );
+        category.setBannerUrl(categoryDTO.getBannerUrl() != null ? categoryDTO.getBannerUrl() : category.getBannerUrl());
+        return category;
     }
 
     public List<Category> toCategoryList(List<CategoryDTO> categoryDTOList){

@@ -3,6 +3,8 @@ package com.food_app_api.Viviepi.entities;
 import com.google.api.client.util.DateTime;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -22,13 +24,15 @@ public class Category{
     @CreatedBy
     @Column(name = "created_by")
     private String createdBy;
-    @CreatedDate
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     private DateTime createdAt;
     @LastModifiedBy
     @Column(name = "updated_by")
     private String updateBy;
-    @LastModifiedDate
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private DateTime updateAt;
     @Column(name = "category_code", unique = true)
