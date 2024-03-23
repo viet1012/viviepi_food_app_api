@@ -6,11 +6,13 @@ import com.food_app_api.Viviepi.entities.Food;
 import com.food_app_api.Viviepi.mapper.FoodMapper;
 import com.food_app_api.Viviepi.repositories.ICategoryRepository;
 import com.food_app_api.Viviepi.repositories.IFoodRepository;
+import com.food_app_api.Viviepi.util.CloudinaryUtil;
 import com.food_app_api.Viviepi.util.UploadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -27,6 +29,9 @@ public class FoodService implements IFoodService {
 
     @Autowired
     private UploadLocalUtil uploadLocalUtil;
+
+    @Autowired
+    private CloudinaryUtil cloudinaryUtil;
 
     @Override
     public List<FoodDTO> getFoodsByCategoryId(Long categoryId) {
@@ -54,8 +59,8 @@ public class FoodService implements IFoodService {
     }
 
     @Override
-    public void saveFood(FoodDTO foodDTO, MultipartFile file) {
-        String fileName = uploadLocalUtil.storeFile(file, "food");
+    public void saveFood(FoodDTO foodDTO, MultipartFile file) throws IOException {
+        String fileName = cloudinaryUtil.uploadImageToFolder(file, "food");
 
         Category category = getCategoryById(foodDTO.getCategory());
         System.out.println("Category: " + category.getName());

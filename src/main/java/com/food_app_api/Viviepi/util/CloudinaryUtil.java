@@ -60,4 +60,5 @@ public class CloudinaryUtil {
             throw new RuntimeException("Failed to create folder on Cloudinary", e);
         }
     }
+
 }
