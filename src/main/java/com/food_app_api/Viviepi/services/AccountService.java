@@ -297,13 +297,13 @@ public class AccountService implements IAccountService{
             System.out.println("User not exist !");
             throw new UserNotFoundException(404, "User not exist !");
         }
-        String verificationResult = validateTokenReset(resetPasswordDTO.getOtp());
-        if (verificationResult.equalsIgnoreCase("valid")) {
-            user.setPassword(this.passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
-            this.userRepository.save(user);
-        }else {
-            return "Verify code is not correct !";
-        }
+//        String verificationResult = validateTokenReset(resetPasswordDTO.getOtp());
+//        if (verificationResult.equalsIgnoreCase("valid")) {
+//            user.setPassword(this.passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
+//            this.userRepository.save(user);
+//        }else {
+//            return "Verify code is not correct !";
+//        }
         System.out.println("Set new password successfully !");
         return "Set new password successfully !";
     }
