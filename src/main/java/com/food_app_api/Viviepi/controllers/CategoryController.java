@@ -61,7 +61,13 @@ public class CategoryController {
         return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
 
     }
+    @PutMapping("/update")
+    public ResponseEntity<ResponseObject> savedCategory(@RequestBody CategoryDTO categoryDTO, @PathVariable long id) {
+        categoryService.update(categoryDTO,id);
+        ResponseObject responseObject = new ResponseObject(HttpStatus.CREATED.value(), "Category saved successfully", null);
+        return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
 
+    }
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteCategory(@RequestParam("id") Long categoryId) {
         CategoryDTO categoryDTO = new CategoryDTO();
