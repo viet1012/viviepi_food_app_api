@@ -9,7 +9,9 @@ import com.food_app_api.Viviepi.exceptions.ObjectEmptyException;
 import com.food_app_api.Viviepi.mapper.CategoryMapper;
 import com.food_app_api.Viviepi.payload.response.ResponseOutput;
 import com.food_app_api.Viviepi.repositories.ICategoryRepository;
+import com.food_app_api.Viviepi.util.CloudinaryUtil;
 import com.food_app_api.Viviepi.util.UploadLocalUtil;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -29,7 +33,8 @@ public class CategoryService implements ICategoryService {
     private final ICategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
     private final UploadLocalUtil uploadLocalUtil;
-
+    @Autowired
+    private  CloudinaryUtil cloudinaryUtil;
 
     @Autowired
     public CategoryService(final ICategoryRepository categoryRepository,
@@ -108,11 +113,11 @@ public class CategoryService implements ICategoryService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insert (CategoryDTO categoryDTO, MultipartFile file ) {
+    public void insert (CategoryDTO categoryDTO, MultipartFile file ) throws IOException {
         String fileName = "";
         if( file != null )
         {
-            fileName = uploadLocalUtil.storeFile(file, "category");
+            fileName = cloudinaryUtil.uploadImageToFolder(file, "category");
 
         }
         Category category = categoryMapper.toCategory(categoryDTO);
@@ -122,10 +127,14 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public void update(CategoryDTO categoryDTO, long id) {
-        Category existingFood = categoryRepository.findById(id).orElse(null);
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
 
-        if (existingFood != null) {
-            categoryRepository.save(categoryMapper.toCategory(categoryDTO));
+        if (optionalCategory.isPresent()) {
+            Category existingCategory = optionalCategory.get();
+             Category updatedCategory = categoryMapper.toCategory(categoryDTO, existingCategory);
+            categoryRepository.save(updatedCategory);
+        } else {
+            throw new EntityNotFoundException("Category not found with id: " + id);
         }
     }
 

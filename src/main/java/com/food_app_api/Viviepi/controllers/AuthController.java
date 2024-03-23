@@ -123,7 +123,17 @@ public class AuthController {
                 )
         );
     }
-
+    @PostMapping("/api/check-otp")
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<ResponseObject> checkOTP(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(
+                        200,
+                        "OTP is: !",
+                        this.accountService.validateTokenReset(resetPasswordDTO.getOtp())
+                )
+        );
+    }
     @PutMapping("/api/set_password")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<ResponseObject> setPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {

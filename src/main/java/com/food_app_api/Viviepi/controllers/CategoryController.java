@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -55,13 +56,13 @@ public class CategoryController {
     }
 
     @PostMapping("/insert")
-    public ResponseEntity<ResponseObject> savedCategory(@RequestParam(value = "file",required = false) MultipartFile file  , @ModelAttribute  CategoryDTO categoryDTO) {
+    public ResponseEntity<ResponseObject> savedCategory(@RequestParam(value = "file",required = false) MultipartFile file  , @ModelAttribute  CategoryDTO categoryDTO) throws IOException {
         categoryService.insert(categoryDTO,file);
         ResponseObject responseObject = new ResponseObject(HttpStatus.CREATED.value(), "Category saved successfully", null);
         return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
 
     }
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ResponseObject> savedCategory(@RequestBody CategoryDTO categoryDTO, @PathVariable long id) {
         categoryService.update(categoryDTO,id);
         ResponseObject responseObject = new ResponseObject(HttpStatus.CREATED.value(), "Category saved successfully", null);

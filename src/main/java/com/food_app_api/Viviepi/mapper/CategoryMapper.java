@@ -39,7 +39,6 @@ public class CategoryMapper {
     }
 
     public Category toCategory(CategoryDTO categoryDTO, Category Category){
-        Category.setId(categoryDTO.getId());
         Category.setName(categoryDTO.getName());
         Category.setBannerUrl(categoryDTO.getBannerUrl());
         return Category;
