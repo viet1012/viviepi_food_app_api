@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 
 @Builder
@@ -16,9 +17,9 @@ import java.sql.Timestamp;
 public class CategoryDTO{
     private Long id;
     private String createdBy;
-    private DateTime createdAt;
+    private LocalDateTime createdAt;
     private String updatedBy;
-    private DateTime updatedAt;
+    private LocalDateTime updatedAt;
     private String categoryCode;
     private String name;
     private int status;

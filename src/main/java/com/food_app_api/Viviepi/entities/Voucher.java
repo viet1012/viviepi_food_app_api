@@ -35,4 +35,6 @@ public class Voucher {
     @Column(name = "status")
     private int status;
 
+    @Column(name = "banner_url")
+    private String bannerUrl;
 }

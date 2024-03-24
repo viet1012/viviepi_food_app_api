@@ -53,13 +53,13 @@ public class FoodMapper {
         return food;
     }
     public Food toFood(FoodDTO foodDTO, Food food, Category category) {
-        food.setId(foodDTO.getId());
-        food.setName(foodDTO.getName());
+        food.setName(foodDTO.getName() != null  ? foodDTO.getName() : food.getName());
         food.setCategory(category);
-        food.setImgUrl(foodDTO.getImgUrl());
-        food.setDescription(foodDTO.getDescription());
-        food.setQuantity(foodDTO.getQuantity());
-        food.setPrice(foodDTO.getPrice());
+        food.setImgUrl(foodDTO.getImgUrl() != null ? foodDTO.getImgUrl() : food.getImgUrl());
+        food.setDescription(foodDTO.getDescription() != null ? foodDTO.getDescription() : food.getDescription());
+        food.setQuantity(foodDTO.getQuantity() != 0 ? foodDTO.getQuantity() : food.getQuantity());
+        food.setPrice(foodDTO.getPrice() != 0 ? foodDTO.getPrice() : food.getPrice());
+
         return food;
     }
 

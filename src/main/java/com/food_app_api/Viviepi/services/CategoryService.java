@@ -131,7 +131,7 @@ public class CategoryService implements ICategoryService {
 
         if (optionalCategory.isPresent()) {
             Category existingCategory = optionalCategory.get();
-             Category updatedCategory = categoryMapper.toCategory(categoryDTO, existingCategory);
+            Category updatedCategory = categoryMapper.toCategory(categoryDTO, existingCategory);
             categoryRepository.save(updatedCategory);
         } else {
             throw new EntityNotFoundException("Category not found with id: " + id);

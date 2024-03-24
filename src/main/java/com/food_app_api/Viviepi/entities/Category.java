@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -24,17 +25,21 @@ public class Category{
     @CreatedBy
     @Column(name = "created_by")
     private String createdBy;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    private DateTime createdAt;
+    private LocalDateTime createdAt;
+
     @LastModifiedBy
     @Column(name = "updated_by")
     private String updateBy;
+
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
-    private DateTime updateAt;
+    private LocalDateTime updateAt;
+
     @Column(name = "category_code", unique = true)
     private String categoryCode;
     @Column(name = "name")
