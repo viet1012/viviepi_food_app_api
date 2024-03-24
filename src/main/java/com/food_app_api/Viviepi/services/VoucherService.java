@@ -7,13 +7,16 @@ import com.food_app_api.Viviepi.exceptions.ObjectEmptyException;
 import com.food_app_api.Viviepi.mapper.VoucherMapper;
 import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.repositories.IVoucherRepository;
+import com.food_app_api.Viviepi.util.CloudinaryUtil;
 import com.google.api.client.util.DateTime;
 import jakarta.transaction.Transactional;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,9 @@ public class VoucherService implements IVoucherService{
     private IVoucherRepository voucherRepository;
     @Autowired
     VoucherMapper voucherMapper;
+    @Autowired
+    CloudinaryUtil cloudinaryUtil;
+
     @Override
     public ResponseObject getAll() {
         List<VoucherDTO> voucherDTOS = new ArrayList<>();
@@ -73,8 +79,15 @@ public class VoucherService implements IVoucherService{
     }
 
     @Override
-    public VoucherDTO insert(VoucherDTO voucherDTO) {
+    public VoucherDTO insert(VoucherDTO voucherDTO, MultipartFile file) throws IOException {
+        String fileName = "";
+        if( file != null )
+        {
+            fileName = cloudinaryUtil.uploadImageToFolder(file, "category");
+
+        }
         Voucher voucher = voucherMapper.toVoucher(voucherDTO);
+        voucher.setBannerUrl(fileName);
         return voucherMapper.toVoucherDTO(voucherRepository.save(voucher));
     }
 

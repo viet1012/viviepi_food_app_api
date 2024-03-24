@@ -30,6 +30,7 @@ public class VoucherMapper {
                 .start_date(voucherDTO.getStartDate())
                 .end_date(voucherDTO.getEndDate())
                 .status(voucherDTO.getStatus())
+                .bannerUrl(voucherDTO.getBannerUrl())
                 .build();
     }
 
@@ -44,6 +45,7 @@ public class VoucherMapper {
         voucherDTO.setStartDate(voucher.getStart_date());
         voucherDTO.setEndDate(voucher.getEnd_date());
         voucherDTO.setStatus(voucher.getStatus());
+        voucherDTO.setBannerUrl(voucher.getBannerUrl());
         return voucherDTO;
     }
 }

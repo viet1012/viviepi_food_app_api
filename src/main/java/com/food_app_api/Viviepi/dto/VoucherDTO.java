@@ -19,5 +19,5 @@ public class VoucherDTO {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private int status;
-
+    private String bannerUrl;
 }
