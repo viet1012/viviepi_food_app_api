@@ -23,8 +23,10 @@ public class Bill {
     @JoinColumn(name = "user_id")
     @NonNull
     private User user;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
+
     @Column(name = "date")
     private LocalDateTime date;
 

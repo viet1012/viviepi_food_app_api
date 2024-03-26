@@ -22,8 +22,8 @@ public class FoodMapper {
                 .price(food.getPrice())
                 .createdBy(food.getCreatedBy())
                 .createdAt(food.getCreatedAt())
-                .updatedBy(food.getUpdateBy())
-                .updatedAt(food.getUpdateAt())
+                .updatedBy(food.getUpdatedBy())
+                .updatedAt(food.getUpdatedAt())
                 .build();
     }
 

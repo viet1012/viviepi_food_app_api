@@ -23,21 +23,21 @@ public class Category{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @CreatedBy
-    @Column(name = "created_by")
+    @Column(name = "createdBy")
     private String createdBy;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at")
+    @Column(name = "createdAt")
     private LocalDateTime createdAt;
 
     @LastModifiedBy
-    @Column(name = "updated_by")
+    @Column(name = "updatedBy")
     private String updateBy;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at")
+    @Column(name = "updatedAt")
     private LocalDateTime updateAt;
 
     @Column(name = "category_code", unique = true)

@@ -55,12 +55,12 @@ public class Food {
 
     @LastModifiedBy
     @Column(name = "updated_by")
-    private String updateBy;
+    private String updatedBy;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
 
 }

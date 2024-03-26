@@ -17,7 +17,7 @@ public class FirebaseMessagingConfig {
     @Bean
     public FirebaseMessaging firebaseMessaging() throws IOException {
         GoogleCredentials googleCredentials = GoogleCredentials
-                .fromStream(new ClassPathResource("viviepiappfood-firebase-adminsdk.json").getInputStream());
+                .fromStream(new ClassPathResource("viviepi-76555-firebase-adminsdk-pv5pj-a26b50b9b8.json").getInputStream());
         FirebaseOptions firebaseOptions = FirebaseOptions.builder()
                 .setCredentials(googleCredentials).build();
         FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions,"viviepi-app");
