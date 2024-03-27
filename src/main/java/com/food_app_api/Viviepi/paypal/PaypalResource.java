@@ -6,6 +6,8 @@ import com.paypal.base.rest.PayPalRESTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/api/Paypal")
@@ -47,15 +49,17 @@ public class PaypalResource {
     }
 
     @GetMapping("/success")
-    public String paymentSuccess(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
+    public ModelAndView paymentSuccess(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if ("approved".equals(payment.getState())) {
-                return "redirect:myappscheme://success";
+                String redirectUrl = "myappscheme://success";
+                return new ModelAndView(new RedirectView(redirectUrl));
             }
         } catch (PayPalRESTException e) {
             throw new RuntimeException(e);
         }
-        return "Payment failed";
+        // Trả về một ModelAndView hoặc chuỗi khác nếu cần
+        return new ModelAndView("payment-failed"); // Ví dụ trả về một trang "payment-failed"
     }
 }
