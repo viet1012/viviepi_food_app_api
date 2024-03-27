@@ -22,8 +22,8 @@ public class PaypalResource {
     @PostMapping("/create-payment")
     public ResponseEntity<String> createPayment() {
         try {
-            String cancelUrl = "http://localhost:8080/api/Paypal/cancel";
-            String successUrl = "http://localhost:8080/api/Paypal/success";
+            String cancelUrl = "https://viviepi-food-app-api.onrender.com/api/Paypal/cancel";
+            String successUrl = "https://viviepi-food-app-api.onrender.com/api/Paypal/success";
             Payment payment = paypalService.createPayment(
                     5.0,
                     "USD",
