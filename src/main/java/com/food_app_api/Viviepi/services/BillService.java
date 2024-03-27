@@ -47,6 +47,7 @@ public class BillService implements IBillService {
     public BillDTO createBill(BillDTO billDTO, String codeVoucher, String token) {
 
         if (jwtUtil.validationToke(token)) {
+            System.out.println("token: "  + token);
             final String data = jwtUtil.parserToken(token);
             ResponseToken responseToken = gson.fromJson(data, ResponseToken.class);
             Optional<User> optionalUser = userRepository.findByEmail(responseToken.getUsername());
@@ -55,13 +56,14 @@ public class BillService implements IBillService {
         }else {
            throw new RuntimeException("Token is not valid!");
         }
+        if(codeVoucher != null)
+        {
+            Voucher voucher = voucherService.findByCode(codeVoucher);
 
-        Voucher voucher = voucherService.findByCode(codeVoucher);
-
-        if (voucher != null && voucherService.isExpire(codeVoucher) ) {
-            billDTO.setVoucher(voucher);
-            // Apply voucher logic here (e.g., update total price of bill)
-            // ship = 20.000
+            if (voucher != null && voucherService.isExpire(codeVoucher) ) {
+                billDTO.setVoucher(voucher);
+                // Apply voucher logic here (e.g., update total price of bill)
+                // ship = 20.000
 //            double curTotalPrice = billDTO.getTotalPrice() - voucher.getValue() + 20000;
 //            if(curTotalPrice < 0)
 //            {
@@ -70,13 +72,14 @@ public class BillService implements IBillService {
 //            }else {
 //                billDTO.setTotalPrice(curTotalPrice);
 //            }
-        }
-        else {
-            throw  new RuntimeException("Voucher is not valid!");
+            }
+            else {
+                throw  new RuntimeException("Voucher is not valid!");
 //            billDTO.setTotalPrice(billDTO.getTotalPrice());
+            }
         }
-        billDTO.setTotalPrice(billDTO.getTotalPrice());
 
+        billDTO.setTotalPrice(billDTO.getTotalPrice());
         Bill bill = billMapper.toBill(billDTO);
         return billMapper.toBillDTO(billRepository.save(bill));
     }
