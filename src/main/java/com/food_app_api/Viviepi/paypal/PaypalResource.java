@@ -51,7 +51,7 @@ public class PaypalResource {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if ("approved".equals(payment.getState())) {
-                return "PaymentSuccess";
+                return "redirect:myappscheme://success";
             }
         } catch (PayPalRESTException e) {
             throw new RuntimeException(e);
