@@ -33,7 +33,7 @@ public class EmailUtil {
         String senderName = "Cổng dịch vụ đăng ký tài khoản người dùng Viviepi";
         String mailContent =
                 "<img align=\"center\" border=\"0\" hspace=\"0\"" +
-                        " src=\"https://lh3.google.com/u/0/d/1xAwgI8uhaZCfwQflIIgwTLnomJaPcs0k\"" +
+                        " src=\"https://res.cloudinary.com/dpxakd3vt/image/upload/v1711374384/ic_launcher_background_app_ci9tdm.png\"" +
                         " style=\"max-width:70px;margin-left:auto;display:block;margin-right:auto\" vspace=\"0\" width=\"70px\" data-bit=\"iit\">"+
                         " <h1 style=\"text-align:center\">Xin chào "+ stringsUtil.getUserNameFormDomain(email)+" </h1>" +
                         "<p align=\"center\">"+"<a style=\"padding:10px;width:104px;height:16px;display:block;margin:8;" +
@@ -54,7 +54,7 @@ public class EmailUtil {
         String senderName = "Cổng dịch vụ đăng ký tài khoản người dùng Viviepi";
         String mailContent =
                 "<img align=\"center\" border=\"0\" hspace=\"0\"" +
-                        " src=\"https://lh3.google.com/u/0/d/1xAwgI8uhaZCfwQflIIgwTLnomJaPcs0k\"" +
+                        " src=\"https://res.cloudinary.com/dpxakd3vt/image/upload/v1711374384/ic_launcher_background_app_ci9tdm.png\"" +
                         " style=\"max-width:70px;margin-left:auto;display:block;margin-right:auto\" vspace=\"0\" width=\"70px\" data-bit=\"iit\">"+
                         " <h1 style=\"text-align:center\">Xin chào "+ stringsUtil.getUserNameFormDomain(email)+" </h1>" +
                         "<p align=\"center\">"+"<a style=\"padding:10px;width:104px;height:16px;display:block;margin:8;" +
