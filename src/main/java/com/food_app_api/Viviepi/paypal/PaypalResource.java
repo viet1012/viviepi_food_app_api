@@ -16,10 +16,10 @@ public class PaypalResource {
     @Autowired
     private PaypalService paypalService;
 
-    @GetMapping("/cancel")
-    public ResponseEntity<String> cancelPay() {
-        return ResponseEntity.ok("Payment canceled.");
-    }
+//    @GetMapping("/cancel")
+//    public ResponseEntity<String> cancelPay() {
+//        return ResponseEntity.ok("Payment canceled.");
+//    }
 
     @PostMapping("/create-payment")
     public ResponseEntity<String> createPayment() {
@@ -61,5 +61,11 @@ public class PaypalResource {
         }
         // Trả về một ModelAndView hoặc chuỗi khác nếu cần
         return new ModelAndView("payment-failed"); // Ví dụ trả về một trang "payment-failed"
+    }
+    @GetMapping("/cancel")
+    public ModelAndView paymentCancel() {
+        String redirectUrl = "myappscheme://fail";
+        // Trả về một ModelAndView hoặc chuỗi khác nếu cần
+        return new ModelAndView(new RedirectView(redirectUrl));
     }
 }
