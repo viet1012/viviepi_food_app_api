@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/VnpayController")
+@RequestMapping("/paymentx/VnpayController")
 public class VnpayController {
     @Autowired
     private IBillRepository billRepository;
