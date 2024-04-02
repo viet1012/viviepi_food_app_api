@@ -48,7 +48,7 @@ public class UserMapper {
         userDTO.setAvtUrl(userEntity.getAvtUrl());
         userDTO.setFullName(userEntity.getFullname());
         userDTO.setEmail(userEntity.getEmail());
-
+        userDTO.setUserID(userEntity.getUserId());
         return userDTO;
     }
 }
