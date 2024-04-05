@@ -326,6 +326,9 @@ public class AccountService implements IAccountService{
 //        }else {
 //            return "Verify code is not correct !";
 //        }
+        user.setPassword(this.passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
+        this.userRepository.save(user);
+
         System.out.println("Set new password successfully !");
         return "Set new password successfully !";
     }
