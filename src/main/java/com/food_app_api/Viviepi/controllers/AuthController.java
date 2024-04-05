@@ -143,7 +143,7 @@ public class AuthController {
                 new ResponseObject(
                         200,
                         "OTP is: !",
-                        this.accountService.validateTokenReset(resetPasswordDTO.getOtp())
+                        this.accountService.validateTokenReset(resetPasswordDTO.getOtp(), resetPasswordDTO.getEmail())
                 )
         );
     }

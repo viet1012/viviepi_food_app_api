@@ -330,9 +330,10 @@ public class AccountService implements IAccountService{
         return "Set new password successfully !";
     }
 
-    public String validateTokenReset(String verifyOTP) {
+    public String validateTokenReset(String verifyOTP, String email) {
+        Optional<User> user = userRepository.findByEmail(email);
         VerificationToken tokenReset = verificationTokenRepository.findByOtp(verifyOTP);
-        if(tokenReset == null){
+        if(tokenReset == null  || user.isEmpty()){
             System.out.println("Invalid verification token !");
             throw new VerificationTokenException(500, "Invalid verification token !");
         }
