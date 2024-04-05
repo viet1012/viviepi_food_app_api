@@ -8,12 +8,14 @@ import com.food_app_api.Viviepi.payload.request.SignInRequest;
 import com.food_app_api.Viviepi.payload.request.SignUpRequest;
 import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.payload.response.ResponseSuccess;
+import com.food_app_api.Viviepi.redis.UserSession;
 import com.food_app_api.Viviepi.services.AccountService;
 import com.food_app_api.Viviepi.util.EmailUtil;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +48,17 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+//    @Autowired
+//    UserSessionService userSessionService;
+
+//    @GetMapping("/info")
+//    public ResponseEntity<ResponseObject> getInfoUserBySession(@RequestBody UserSession userSession) {
+//        System.out.println("UserID: " + userSession.getUserId());
+//        UserSession user = userSessionService.getUserSession(userSession.getUserId());
+//        ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(), "Info User: ", user);
+//
+//        return new ResponseEntity<>(responseObject, HttpStatus.OK);
+//    }
 
     @GetMapping("/get/info")
     @Transactional(rollbackFor = Exception.class)

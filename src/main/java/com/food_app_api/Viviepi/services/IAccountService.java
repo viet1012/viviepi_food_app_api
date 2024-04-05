@@ -26,7 +26,7 @@ public interface IAccountService {
     ResponseObject signInAdmin(SignInRequest signInRequest);
     @Transactional(rollbackFor = Exception.class)
     ResponseObject signInUser(SignInRequest signInRequest);
-    UserSignUpDTO signUp(SignUpRequest request);
+    UserSignUpDTO signUp(SignUpRequest request) throws Exception;
     String verifyEmail(UserSignUpDTO signUpDTO);
     String forgotPassword(String email) throws UnsupportedEncodingException, MessagingException;
     String setPassword(ResetPasswordDTO resetPasswordDTO);

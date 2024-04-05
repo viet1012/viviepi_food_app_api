@@ -5,6 +5,7 @@ import com.food_app_api.Viviepi.dto.RolesUsersDTO;
 import com.food_app_api.Viviepi.dto.UserDTO;
 import com.food_app_api.Viviepi.dto.UserSignUpDTO;
 import com.food_app_api.Viviepi.dto.token.RefreshTokenDTO;
+import com.food_app_api.Viviepi.entities.RegistrationTokenDevice;
 import com.food_app_api.Viviepi.entities.Role;
 import com.food_app_api.Viviepi.entities.RolesUsers;
 import com.food_app_api.Viviepi.entities.User;
@@ -21,6 +22,7 @@ import com.food_app_api.Viviepi.mapper.UserMapper;
 import com.food_app_api.Viviepi.payload.request.SignInRequest;
 import com.food_app_api.Viviepi.payload.request.SignUpRequest;
 import com.food_app_api.Viviepi.payload.response.ResponseObject;
+import com.food_app_api.Viviepi.redis.UserSession;
 import com.food_app_api.Viviepi.repositories.*;
 import com.food_app_api.Viviepi.util.EmailUtil;
 import com.food_app_api.Viviepi.util.UUIDUtil;
@@ -89,7 +91,11 @@ public class AccountService implements IAccountService{
     @Autowired
     Gson gson = new Gson();
 
+//    @Autowired
+//    UserSessionService userSessionService;
 
+    @Autowired
+    IRegistrationTokenDeviceRepository registrationTokenDeviceRepository;
     @Override
     public UserDTO getUserInfo(String token) {
         UserDTO userDTO = new UserDTO();
@@ -101,7 +107,7 @@ public class AccountService implements IAccountService{
             Optional<User> optionalUser = userRepository.findByEmail(responseToken.getUsername());
             User user = optionalUser.get();
             userDTO = userMapper.toUserDTO(user);
-            name = responseToken.getUsername();
+//            name = responseToken.getUsername();
         }else {
             System.out.println("Token is not valid!");
         }
@@ -139,32 +145,43 @@ public class AccountService implements IAccountService{
 
 
     @Override
-    public UserSignUpDTO signUp(SignUpRequest request) {
-        User user = new User();
-        user.setFullname(request.getFullName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setIsActive(true);
-        user.setUserId(uuidUtil.generateUUID());
-        Role role = roleRepository.findOneByName(request.getRoleName());
-        System.out.println("Name role : " + role.getName());
+    public UserSignUpDTO signUp(SignUpRequest request)  {
+        if(!checkEmailExists(request.getEmail()))
+        {
+            User user = new User();
+            user.setFullname(request.getFullName());
+            user.setEmail(request.getEmail());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setIsActive(true);
+            user.setUserId(uuidUtil.generateUUID());
+            Role role = roleRepository.findOneByName(request.getRoleName());
+            System.out.println("Name role : " + role.getName());
 
-        User newUser = userRepository.save(user);
-        UserSignUpDTO userSignUpDTO = userMapper.userSignUpToUserSignUpDTO(newUser);
-        RolesUsersDTO rolesUsersDTO = roleUsersMapper.toRoleUserDTO(newUser, role);
-        String verifyCode = String.format("%040d", new BigInteger(
-                UUID.randomUUID().toString().replace("-", ""), 16)
-        );
+            User newUser = userRepository.save(user);
+            UserSignUpDTO userSignUpDTO = userMapper.userSignUpToUserSignUpDTO(newUser);
+            RolesUsersDTO rolesUsersDTO = roleUsersMapper.toRoleUserDTO(newUser, role);
+            String verifyCode = String.format("%040d", new BigInteger(
+                    UUID.randomUUID().toString().replace("-", ""), 16)
+            );
 
-        VerificationToken verificationToken = new VerificationToken(verifyCode.substring(0, 6), user);
-        userSignUpDTO.setToken(verificationToken.getOtp());
-        this.verificationTokenRepository.save(verificationToken);
-        //save cái dto converter đã xử lý xuống database
-        this.roleUserRepository.save(
-                roleUsersMapper.toRoleUserEntity(rolesUsersDTO)
-        );
+            VerificationToken verificationToken = new VerificationToken(verifyCode.substring(0, 6), user);
+            userSignUpDTO.setToken(verificationToken.getOtp());
+            this.verificationTokenRepository.save(verificationToken);
+            // save registrationTokenDevice
+            RegistrationTokenDevice registrationTokenDevice = new RegistrationTokenDevice();
+            registrationTokenDevice.setTokenDevice(request.getTokenDevice());
+            registrationTokenDeviceRepository.save(registrationTokenDevice);
+            //save cái dto converter đã xử lý xuống database
+            this.roleUserRepository.save(
+                    roleUsersMapper.toRoleUserEntity(rolesUsersDTO)
+            );
 
-        return  userSignUpDTO;
+            return  userSignUpDTO;
+        }else{
+            throw new PermissionDenyException(403, "Email is exist !", null);
+
+        }
+
     }
 
 
@@ -175,6 +192,8 @@ public class AccountService implements IAccountService{
                 signInRequest.getEmail()
         );
         if (rolesUsers.getIdRole().getName().equals("ROLE_USER")){
+
+
             return new ResponseObject(
                     200,
                     "sign-In by user !",
@@ -201,6 +220,12 @@ public class AccountService implements IAccountService{
         User user = optionalUser.get();
         revokeAllUserTokens(user);
         saveUserToken(user, refreshToken);
+
+        Optional<User> currentUser = userRepository.findByEmail(email);
+        UserSession userSession = new UserSession(currentUser.get().getUserId(),token,email);
+        // Lưu session vào Redis
+        //userSessionService.saveUserSession(userSession);
+
         System.out.println("Generate token is successfully !");
         return ResponseAuthentication.builder()
                 .accessToken(token)
