@@ -22,7 +22,6 @@ import com.food_app_api.Viviepi.mapper.UserMapper;
 import com.food_app_api.Viviepi.payload.request.SignInRequest;
 import com.food_app_api.Viviepi.payload.request.SignUpRequest;
 import com.food_app_api.Viviepi.payload.response.ResponseObject;
-import com.food_app_api.Viviepi.redis.UserSession;
 import com.food_app_api.Viviepi.repositories.*;
 import com.food_app_api.Viviepi.util.EmailUtil;
 import com.food_app_api.Viviepi.util.UUIDUtil;
@@ -91,8 +90,6 @@ public class AccountService implements IAccountService{
     @Autowired
     Gson gson = new Gson();
 
-//    @Autowired
-//    UserSessionService userSessionService;
 
     @Autowired
     IRegistrationTokenDeviceRepository registrationTokenDeviceRepository;
@@ -221,8 +218,8 @@ public class AccountService implements IAccountService{
         revokeAllUserTokens(user);
         saveUserToken(user, refreshToken);
 
-        Optional<User> currentUser = userRepository.findByEmail(email);
-        UserSession userSession = new UserSession(currentUser.get().getUserId(),token,email);
+//        Optional<User> currentUser = userRepository.findByEmail(email);
+        //UserSession userSession = new UserSession(currentUser.get().getUserId(),token,email);
         // Lưu session vào Redis
         //userSessionService.saveUserSession(userSession);
 
