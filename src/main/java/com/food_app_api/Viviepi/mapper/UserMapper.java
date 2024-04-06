@@ -3,6 +3,7 @@ package com.food_app_api.Viviepi.mapper;
 
 import com.food_app_api.Viviepi.dto.UserDTO;
 import com.food_app_api.Viviepi.dto.UserSignUpDTO;
+import com.food_app_api.Viviepi.entities.Role;
 import com.food_app_api.Viviepi.entities.User;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class UserMapper {
         return userDTO;
     }
 
-    public UserSignUpDTO userSignUpToUserSignUpDTO(User user){
+    public UserSignUpDTO userSignUpToUserSignUpDTO(User user, Role role){
         UserSignUpDTO userSignUpDTO = new UserSignUpDTO();
         userSignUpDTO.setUserId(user.getUserId());
         userSignUpDTO.setFullName(user.getFullname());
@@ -33,7 +34,7 @@ public class UserMapper {
         userSignUpDTO.setPassword(user.getPassword());
         userSignUpDTO.setActive(true);
        // role default : "USER"
-        userSignUpDTO.setRoleName("ROLE_USER");
+        userSignUpDTO.setRoleName(role.getName());
         return userSignUpDTO;
     }
 

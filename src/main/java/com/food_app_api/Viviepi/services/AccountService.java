@@ -155,7 +155,7 @@ public class AccountService implements IAccountService{
             System.out.println("Name role : " + role.getName());
 
             User newUser = userRepository.save(user);
-            UserSignUpDTO userSignUpDTO = userMapper.userSignUpToUserSignUpDTO(newUser);
+            UserSignUpDTO userSignUpDTO = userMapper.userSignUpToUserSignUpDTO(newUser,role);
             RolesUsersDTO rolesUsersDTO = roleUsersMapper.toRoleUserDTO(newUser, role);
             String verifyCode = String.format("%040d", new BigInteger(
                     UUID.randomUUID().toString().replace("-", ""), 16)
