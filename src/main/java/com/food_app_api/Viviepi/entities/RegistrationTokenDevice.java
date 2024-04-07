@@ -16,9 +16,10 @@ import lombok.*;
 public class RegistrationTokenDevice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "token_device", nullable = false, length = 255)
+    @Column(name = "token_device")
     private String tokenDevice;
 
 }
