@@ -5,5 +5,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IRegistrationTokenDeviceRepository extends JpaRepository<RegistrationTokenDevice, Long> {
+    boolean existsByTokenDevice(String token);
 }
 

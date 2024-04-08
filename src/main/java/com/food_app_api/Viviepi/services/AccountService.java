@@ -165,9 +165,11 @@ public class AccountService implements IAccountService{
             userSignUpDTO.setToken(verificationToken.getOtp());
             this.verificationTokenRepository.save(verificationToken);
             // save registrationTokenDevice
-            RegistrationTokenDevice registrationTokenDevice = new RegistrationTokenDevice();
-            registrationTokenDevice.setTokenDevice(request.getTokenDevice());
-            registrationTokenDeviceRepository.save(registrationTokenDevice);
+            if (!registrationTokenDeviceRepository.existsByTokenDevice(request.getTokenDevice())) {
+                RegistrationTokenDevice registrationTokenDevice = new RegistrationTokenDevice();
+                registrationTokenDevice.setTokenDevice(request.getTokenDevice());
+                registrationTokenDeviceRepository.save(registrationTokenDevice);
+            }
             //save cái dto converter đã xử lý xuống database
             this.roleUserRepository.save(
                     roleUsersMapper.toRoleUserEntity(rolesUsersDTO)
