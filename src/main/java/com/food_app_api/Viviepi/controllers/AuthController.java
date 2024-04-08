@@ -6,6 +6,7 @@ import com.food_app_api.Viviepi.exceptions.AlreadyExistException;
 import com.food_app_api.Viviepi.jwt.JwtUtil;
 import com.food_app_api.Viviepi.payload.request.SignInRequest;
 import com.food_app_api.Viviepi.payload.request.SignUpRequest;
+import com.food_app_api.Viviepi.payload.response.ResponseError;
 import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.payload.response.ResponseSuccess;
 //import com.food_app_api.Viviepi.redis.UserSession;
@@ -101,7 +102,7 @@ public class AuthController {
     public ResponseEntity<?> SignUpUser(@Valid @RequestBody SignUpRequest signUpRequest) throws AlreadyExistException, UnsupportedEncodingException {
         ResponseSuccess success = new ResponseSuccess();
         if(accountService.checkEmailExists(signUpRequest.getEmail())){
-            throw new AlreadyExistException("Email is already exist!");
+            return new ResponseEntity<>("Email is already registered", HttpStatus.BAD_REQUEST);
         }
         signUpRequest.setRoleName("ROLE_USER");
         success.setStatus(HttpStatus.OK.value());
