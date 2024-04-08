@@ -1,17 +1,24 @@
 package com.food_app_api.Viviepi.notify;
 
+import com.food_app_api.Viviepi.entities.RegistrationTokenDevice;
+import com.food_app_api.Viviepi.services.RegistrationTokenDeviceService;
 import com.google.firebase.messaging.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FirebaseMessagingService {
 
     @Autowired
     private FirebaseMessaging firebaseMessaging;
+
+    @Autowired
+    private RegistrationTokenDeviceService registrationTokenDeviceService;
 
     public String sendNotificationByToken(NotificationMessage notificationMessage) {
         Notification notification = Notification.builder()
@@ -24,8 +31,17 @@ public class FirebaseMessagingService {
                 .setNotification(notification)
                 .putAllData(notificationMessage.getData());
 
+        List<RegistrationTokenDevice> registrationTokenDevices =
+                registrationTokenDeviceService.getAllTokens();
+
+        List<String> tokens = new ArrayList<>();
+
+        for (RegistrationTokenDevice device : registrationTokenDevices) {
+            tokens.add(device.getTokenDevice());
+        }
+
         // Convert the list of tokens to an array of strings
-        List<String> tokens = notificationMessage.getRegistrationTokens();
+//        List<String> tokens = notificationMessage.getRegistrationTokens();
         String[] tokensArray = tokens.toArray(new String[0]);
 
         // Build the multicast message
