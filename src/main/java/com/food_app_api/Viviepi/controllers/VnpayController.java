@@ -135,7 +135,7 @@ public class VnpayController {
 //        return paymentUrl;
 //    }
     @PostMapping("pay")
-    public String getPay(@RequestBody BillDTO billRequest ,@RequestParam(name = "codeVoucher", required = false) String codeVoucher,
+    public String getPay(@RequestBody BillDTO billRequest ,
                          @RequestParam(name = "Authorization") String token) throws UnsupportedEncodingException {
 
         String vnp_Version = "2.1.0";
@@ -145,7 +145,7 @@ public class VnpayController {
         String bankCode = "NCB";
 
         String vnp_TxnRef = VnpayConfig.getRandomNumber(8);
-        String vnp_IpAddr = "127.0.0.1";
+        String vnp_IpAddr = "http://viviepi-food-app-api.onrender.com";
 
         String vnp_TmnCode = VnpayConfig.vnp_TmnCode;
 // BillDTO createdBill = billService.createBill(billRequest, codeVoucher, token);
