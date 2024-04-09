@@ -136,7 +136,7 @@ public class AccountService implements IAccountService{
                     token(signInRequest.getEmail(), signInRequest.getPassword())
             );
         }else {
-            throw new PermissionDenyException(403, "Permission Denied !", null);
+            throw new PermissionDenyException(403, "Email or Password Denied !", null);
         }
     }
 
@@ -148,7 +148,14 @@ public class AccountService implements IAccountService{
             User user = new User();
             user.setFullname(request.getFullName());
             user.setEmail(request.getEmail());
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            if(request.isGoogle())
+            {
+                user.setPassword(null);
+            }
+            else {
+                user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+            }
             user.setIsActive(true);
             user.setUserId(uuidUtil.generateUUID());
             Role role = roleRepository.findOneByName(request.getRoleName());
@@ -199,7 +206,7 @@ public class AccountService implements IAccountService{
                     token(signInRequest.getEmail(), signInRequest.getPassword())
             );
         }else {
-            throw new PermissionDenyException(403, "Permission Denied !", null);
+            throw new PermissionDenyException(403, "Email or Password Denied !", null);
         }
     }
 

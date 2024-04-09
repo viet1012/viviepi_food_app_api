@@ -18,11 +18,12 @@ public class SignUpRequest {
     @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")
     private String email;
 
-    @NotBlank(message = "Password is required")
+  //  @NotBlank(message = "Password is required")
 //    @Pattern(message = "Password is not valid",regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$")
     private String password;
 
     private String roleName;
 
     private String tokenDevice;
+    public boolean isGoogle;
 }

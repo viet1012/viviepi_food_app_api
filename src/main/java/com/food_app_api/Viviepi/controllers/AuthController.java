@@ -1,8 +1,10 @@
 package com.food_app_api.Viviepi.controllers;
 
+import com.food_app_api.Viviepi.dto.GoogleTokenDTO;
 import com.food_app_api.Viviepi.dto.ResetPasswordDTO;
 import com.food_app_api.Viviepi.dto.UserDTO;
 import com.food_app_api.Viviepi.exceptions.AlreadyExistException;
+import com.food_app_api.Viviepi.exceptions.PermissionDenyException;
 import com.food_app_api.Viviepi.jwt.JwtUtil;
 import com.food_app_api.Viviepi.payload.request.SignInRequest;
 import com.food_app_api.Viviepi.payload.request.SignUpRequest;
@@ -11,7 +13,12 @@ import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.payload.response.ResponseSuccess;
 //import com.food_app_api.Viviepi.redis.UserSession;
 import com.food_app_api.Viviepi.services.AccountService;
+import com.food_app_api.Viviepi.services.FirebaseUserService;
 import com.food_app_api.Viviepi.util.EmailUtil;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.ListUsersPage;
+import com.google.firebase.auth.UserRecord;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -26,6 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -49,9 +58,12 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private FirebaseUserService authService;
+
 //    @Autowired
 //    UserSessionService userSessionService;
-
 //    @GetMapping("/info")
 //    public ResponseEntity<ResponseObject> getInfoUserBySession(@RequestBody UserSession userSession) {
 //        System.out.println("UserID: " + userSession.getUserId());
@@ -59,6 +71,25 @@ public class AuthController {
 //        ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(), "Info User: ", user);
 //
 //        return new ResponseEntity<>(responseObject, HttpStatus.OK);
+//    }
+
+//    @GetMapping("/firebase/users")
+//    public List<String> getUsers() throws Exception {
+//        // Khởi tạo Firebase Admin SDK
+//        FirebaseApp app = FirebaseApp.getInstance("viviepi-app");
+//        FirebaseAuth auth = FirebaseAuth.getInstance(app);
+//
+//
+//        // Lấy danh sách người dùng từ Firebase Authentication
+//        ListUsersPage page = auth.listUsers(null);
+//        List<String> userEmails = new ArrayList<>();
+//
+//        // Lặp qua danh sách người dùng và lấy email của từng người dùng
+//        for (UserRecord user : page.getValues()) {
+//            userEmails.add(user.getEmail());
+//        }
+//
+//        return userEmails;
 //    }
 
     @GetMapping("/get/info")
@@ -86,8 +117,13 @@ public class AuthController {
     @PostMapping("/sign-in")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<ResponseObject> SignInUser(@RequestBody SignInRequest signInDTO) {
-
-        return new ResponseEntity<>(accountService.signInUser(signInDTO), HttpStatus.OK);
+        try {
+            ResponseObject responseObject = accountService.signInUser(signInDTO);
+            return new ResponseEntity<>(responseObject, HttpStatus.OK);
+        } catch (PermissionDenyException e) {
+            ResponseObject errorResponse = new ResponseObject(e.getStatusCode(),"Email or Password is  not valid ", null);
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
     }
 
     @PostMapping("/sign-in/admin")
@@ -116,7 +152,8 @@ public class AuthController {
     public ResponseEntity<?> SignUpAdmin(@Valid @RequestBody SignUpRequest signUpRequest) throws AlreadyExistException, UnsupportedEncodingException {
         ResponseSuccess success = new ResponseSuccess();
         if(accountService.checkEmailExists(signUpRequest.getEmail())){
-            throw new AlreadyExistException("Email is already exist!");
+            return new ResponseEntity<>("Email is already registered", HttpStatus.BAD_REQUEST);
+
         }
         signUpRequest.setRoleName("ROLE_ADMIN");
         success.setStatus(HttpStatus.OK.value());
