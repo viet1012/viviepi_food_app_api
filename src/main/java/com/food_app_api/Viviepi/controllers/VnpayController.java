@@ -17,6 +17,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -173,14 +177,25 @@ public class VnpayController {
         vnp_Params.put("vnp_ReturnUrl", VnpayConfig.vnp_ReturnUrl + "?billId=" + vnp_TxnRef);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
-        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        String vnp_CreateDate = formatter.format(cld.getTime());
-        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+        // Lấy múi giờ hiện tại
+        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
 
-        cld.add(Calendar.MINUTE, 15);
-        String vnp_ExpireDate = formatter.format(cld.getTime());
+// Tạo đối tượng LocalDateTime từ thời gian hiện tại và đổi múi giờ
+        LocalDateTime now = LocalDateTime.now();
+        ZonedDateTime zonedDateTime = now.atZone(ZoneId.systemDefault()).withZoneSameInstant(zoneId);
+
+// Thêm 15 phút
+        ZonedDateTime expireDateTime = zonedDateTime.plusMinutes(15);
+
+// Định dạng thời gian theo định dạng yyyMMddHHmmss
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String vnp_CreateDate = now.format(formatter);
+        String vnp_ExpireDate = expireDateTime.format(formatter);
+
+// Đặt các giá trị vào vnp_Params
+        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
+
 
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);
