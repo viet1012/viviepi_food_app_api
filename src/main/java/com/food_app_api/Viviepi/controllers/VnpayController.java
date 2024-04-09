@@ -11,6 +11,8 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -33,7 +35,7 @@ public class VnpayController {
 
 
     @GetMapping("payment-callback")
-    public ResponseEntity<String> paymentCallback(@RequestParam Map<String, String> queryParams) throws ChangeSetPersister.NotFoundException {
+    public ModelAndView paymentCallback(@RequestParam Map<String, String> queryParams) throws ChangeSetPersister.NotFoundException {
         String vnp_ResponseCode = queryParams.get("vnp_ResponseCode");
         String billId = queryParams.get("billId");
 
@@ -56,16 +58,19 @@ public class VnpayController {
 //                } else {
 //                    return new ResponseEntity<>("Không tìm thấy BillId.", HttpStatus.NOT_FOUND);
 //                }
-
+                String redirectUrl = "myappscheme://success";
+                return new ModelAndView(new RedirectView(redirectUrl));
                 // Trả về thông báo thành công và billId
-                return ResponseEntity.ok().body("Transaction successful for billId: " + billId);
+               // return ResponseEntity.ok().body("Transaction successful for billId: " + billId);
             } else {
                 // Trả về thông báo thất bại
-                return ResponseEntity.badRequest().body("Transaction failed for billId: " + billId);
+                String redirectUrl = "myappscheme://fail";
+                // Trả về một ModelAndView hoặc chuỗi khác nếu cần
+                return new ModelAndView(new RedirectView(redirectUrl));
             }
         } else {
             // Trả về lỗi nếu không tìm thấy billId
-            return ResponseEntity.badRequest().body("Invalid billId.");
+            return new ModelAndView("payment-failed");
         }
     }
 //    @GetMapping("pay1")
@@ -178,19 +183,19 @@ public class VnpayController {
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         // Lấy múi giờ hiện tại
-        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+        ZoneId zoneId = ZoneId.of("SE Asia Standard Time");
 
 // Tạo đối tượng LocalDateTime từ thời gian hiện tại và đổi múi giờ
         LocalDateTime now = LocalDateTime.now();
         ZonedDateTime zonedDateTime = now.atZone(ZoneId.systemDefault()).withZoneSameInstant(zoneId);
 
 // Thêm 15 phút
-        ZonedDateTime expireDateTime = zonedDateTime.plusMinutes(15);
+        ZonedDateTime seAsiaTime = zonedDateTime.plusHours(1);
 
 // Định dạng thời gian theo định dạng yyyMMddHHmmss
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String vnp_CreateDate = now.format(formatter);
-        String vnp_ExpireDate = expireDateTime.format(formatter);
+        String vnp_ExpireDate = seAsiaTime.format(formatter);
 
 // Đặt các giá trị vào vnp_Params
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
