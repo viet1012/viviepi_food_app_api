@@ -1,6 +1,5 @@
 package com.food_app_api.Viviepi.controllers;
 
-import com.food_app_api.Viviepi.dto.GoogleTokenDTO;
 import com.food_app_api.Viviepi.dto.ResetPasswordDTO;
 import com.food_app_api.Viviepi.dto.UserDTO;
 import com.food_app_api.Viviepi.exceptions.AlreadyExistException;
@@ -11,19 +10,13 @@ import com.food_app_api.Viviepi.payload.request.SignUpRequest;
 import com.food_app_api.Viviepi.payload.response.ResponseError;
 import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.payload.response.ResponseSuccess;
-//import com.food_app_api.Viviepi.redis.UserSession;
 import com.food_app_api.Viviepi.services.AccountService;
-import com.food_app_api.Viviepi.services.FirebaseUserService;
 import com.food_app_api.Viviepi.util.EmailUtil;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.ListUsersPage;
-import com.google.firebase.auth.UserRecord;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,8 +52,8 @@ public class AuthController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private FirebaseUserService authService;
+//    @Autowired
+//    private FirebaseUserService authService;
 
 //    @Autowired
 //    UserSessionService userSessionService;
