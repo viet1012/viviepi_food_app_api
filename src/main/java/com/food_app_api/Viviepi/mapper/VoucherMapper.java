@@ -22,7 +22,7 @@ public class VoucherMapper {
 
 
 
-    public Voucher toVoucher(VoucherDTO voucherDTO){
+    public Voucher toVoucher(VoucherDTO voucherDTO,String fileName){
         return Voucher.builder()
                 .id(voucherDTO.getId())
                 .code(voucherDTO.getCode())
@@ -30,7 +30,8 @@ public class VoucherMapper {
                 .start_date(voucherDTO.getStartDate())
                 .end_date(voucherDTO.getEndDate())
                 .status(voucherDTO.getStatus())
-                .bannerUrl(voucherDTO.getBannerUrl())
+                .bannerUrl(fileName)
+//                .bannerUrl(voucherDTO.getBannerUrl())
                 .build();
     }
 

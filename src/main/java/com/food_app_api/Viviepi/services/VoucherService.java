@@ -75,14 +75,18 @@ public class VoucherService implements IVoucherService{
 
     @Override
     public VoucherDTO insert(VoucherDTO voucherDTO, MultipartFile file) throws IOException {
+        System.out.println("voucherDTO: value: " + voucherDTO.getValue());
+
         String fileName = "";
         if( file != null )
         {
             fileName = cloudinaryUtil.uploadImageToFolder(file, "voucher");
 
         }
-        Voucher voucher = voucherMapper.toVoucher(voucherDTO);
-        voucher.setBannerUrl(fileName);
+        Voucher voucher = voucherMapper.toVoucher(voucherDTO,fileName);
+        System.out.println("voucher: start date: " + voucher.getStart_date());
+        System.out.println("voucher: value: " + voucher.getValue());
+      //  voucher.setBannerUrl(fileName);
         return voucherMapper.toVoucherDTO(voucherRepository.save(voucher));
     }
 
