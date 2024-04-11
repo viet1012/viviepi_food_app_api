@@ -44,8 +44,8 @@ public class VoucherMapper {
         voucherDTO.setValue(voucher.getValue());
         voucherDTO.setStartDate(voucher.getStart_date());
         voucherDTO.setEndDate(voucher.getEnd_date());
-        voucherDTO.setStatus(voucher.getStatus());
-        voucherDTO.setBannerUrl(voucher.getBannerUrl());
+        voucherDTO.setStatus(voucher.getStatus() == 1 ?  voucher.getStatus() : 0);
+        voucherDTO.setBannerUrl(voucher.getBannerUrl() != null ? voucherDTO.getBannerUrl() : null);
         return voucherDTO;
     }
 }

@@ -27,7 +27,7 @@ public class VoucherController {
 
     }
     @GetMapping("/get/all")
-    public ResponseEntity<?> getAllVoucher (){
+    public ResponseEntity<ResponseObject> getAllVoucher (){
         return ResponseEntity.status(HttpStatus.OK).body(
                 voucherService.getAll());
 

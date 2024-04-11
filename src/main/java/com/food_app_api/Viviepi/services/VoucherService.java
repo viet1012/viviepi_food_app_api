@@ -34,19 +34,14 @@ public class VoucherService implements IVoucherService{
 
     @Override
     public ResponseObject getAll() {
-        List<VoucherDTO> voucherDTOS = new ArrayList<>();
         List<Voucher> voucherList = voucherRepository.findAll();
-        List<String> codes = voucherRepository.getAllCode();
         if(voucherList.isEmpty())
         {
-
             throw new ObjectEmptyException(
                     404, "List voucher is empty !");
         }
-        for (Voucher voucher : voucherList){
-            voucherDTOS.add(voucherMapper.toVoucherDTO(voucher));
-        }
-        return new ResponseObject(200, "List Voucher", voucherList);
+
+        return new ResponseObject(200, "List Voucher", voucherMapper.toVoucherDTOList(voucherList));
 
     }
 
@@ -83,7 +78,7 @@ public class VoucherService implements IVoucherService{
         String fileName = "";
         if( file != null )
         {
-            fileName = cloudinaryUtil.uploadImageToFolder(file, "category");
+            fileName = cloudinaryUtil.uploadImageToFolder(file, "voucher");
 
         }
         Voucher voucher = voucherMapper.toVoucher(voucherDTO);
