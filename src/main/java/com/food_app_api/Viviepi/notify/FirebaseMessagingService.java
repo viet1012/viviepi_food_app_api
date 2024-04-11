@@ -40,12 +40,11 @@ public class FirebaseMessagingService {
             tokens.add(device.getTokenDevice());
         }
 
-        // Convert the list of tokens to an array of strings
-//        List<String> tokens = notificationMessage.getRegistrationTokens();
         String[] tokensArray = tokens.toArray(new String[0]);
 
         // Build the multicast message
         MulticastMessage message = messageBuilder.addAllTokens(Arrays.asList(tokensArray)).build();
+//        MulticastMessage message = messageBuilder.addAllTokens(tokens).build();
 
         try {
             BatchResponse response = firebaseMessaging.sendMulticast(message);
