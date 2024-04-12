@@ -13,6 +13,8 @@ import com.food_app_api.Viviepi.repositories.IVoucherRepository;
 import com.food_app_api.Viviepi.services.IBillService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
@@ -88,6 +90,12 @@ public class BillService implements IBillService {
     public List<BillDTO> getAllBills() {
         List<Bill> bills = billRepository.findAll();
         return billMapper.toBillDTOList(bills);
+    }
+
+    @Override
+    public Page<BillDTO> getAllBills(Pageable pageable) {
+        Page<Bill> billPage = billRepository.findAll(pageable);
+        return billPage.map(billMapper::toBillDTO); // Sử dụng map để chuyển đổi từ Page<Bill> sang Page<BillDTO>
     }
 
     @Override

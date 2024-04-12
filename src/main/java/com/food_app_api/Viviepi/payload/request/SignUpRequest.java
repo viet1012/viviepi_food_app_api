@@ -25,5 +25,6 @@ public class SignUpRequest {
     private String roleName;
 
     private String tokenDevice;
+
     public boolean isGoogle;
 }

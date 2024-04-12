@@ -4,6 +4,8 @@ import com.food_app_api.Viviepi.dto.BillDTO;
 import com.food_app_api.Viviepi.payload.response.ResponseObject;
 import com.food_app_api.Viviepi.services.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,15 @@ public class BillController {
                 )
         );
     }
+
+    @GetMapping("/bills")
+    public Page<BillDTO> getAllBills(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return billService.getAllBills(PageRequest.of(page, size));
+    }
+
     @GetMapping("/get/all/by/user-id/{userId}")
     @Transactional(readOnly = true)
     public ResponseEntity<ResponseObject>getAllBillByUserId(@PathVariable long userId){
