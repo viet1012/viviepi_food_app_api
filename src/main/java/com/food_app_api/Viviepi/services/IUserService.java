@@ -20,5 +20,6 @@ public interface IUserService {
 
     long getIdByEmail(String emai);
 
+    void deleteUserByUserId(String userId);
 
 }

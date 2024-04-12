@@ -129,5 +129,17 @@ public class UserService implements IUserService {
         return 0;
     }
 
+    @Override
+    public void deleteUserByUserId(String userId) {
+        Optional<User> user = userRepository.findByUserId(userId);
+        if(user.isPresent())
+        {
+            userRepository.delete(user.get());
+        }
+        else {
+            return;
+        }
+    }
+
 
 }
