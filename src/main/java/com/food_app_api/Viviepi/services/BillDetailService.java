@@ -10,7 +10,9 @@ import com.food_app_api.Viviepi.mapper.BillDetailMapper;
 import com.food_app_api.Viviepi.mapper.BillMapper;
 import com.food_app_api.Viviepi.mapper.FoodMapper;
 import com.food_app_api.Viviepi.repositories.IBillDetailRepository;
+import com.food_app_api.Viviepi.repositories.IFoodRepository;
 import org.apache.catalina.mapper.Mapper;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,8 @@ public class BillDetailService implements  IBillDetailService{
     private BillMapper billMapper;
     @Autowired
     private FoodMapper foodMapper;
+    @Autowired
+    private IFoodRepository foodRepository;
 
     @Override
     public List<BillDetailDTO> getBillDetailsByBillId(Long billId) {
@@ -65,6 +69,15 @@ public class BillDetailService implements  IBillDetailService{
 //            int quantity = newBillDetail.getQuantity();
 //            totalPriceIncrease += unitPrice * quantity;
             Food food = foodMapper.toFood(foodDTO);
+            if(food.getQuantity() - foodItem.getQuantity() > 0)
+            {
+                food.setQuantity(food.getQuantity() - foodItem.getQuantity());
+                foodRepository.save(food);
+
+            }else {
+                throw new IllegalArgumentException("Không đủ số lượng sản phẩm có id = " + foodItem.getId());
+            }
+
             BillDetail billDetail = new BillDetail();
             billDetail.setBill(bill);
             billDetail.setFood(food);
