@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/address")
+@RequestMapping("/address/api")
 public class AddressController {
 
     private final IAddressService addressService;
@@ -20,6 +20,12 @@ public class AddressController {
     @Autowired
     public AddressController(IAddressService addressService) {
         this.addressService = addressService;
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<ResponseObject> getAddressesByUserId(@PathVariable("userId") Long userId) {
+        List<AddressDTO> addressDTOs = addressService.getAddressesByUserId(userId);
+        return ResponseEntity.ok().body(new ResponseObject(HttpStatus.OK.value(), "Success", addressDTOs));
     }
 
     @GetMapping("/{id}")
@@ -32,9 +38,9 @@ public class AddressController {
         }
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<ResponseObject> getAddressesByUserId(@PathVariable("userId") Long userId) {
-        List<AddressDTO> addressDTOs = addressService.getAddressesByUserId(userId);
+    @GetMapping("/get/all")
+    public ResponseEntity<ResponseObject> getAllAddress() {
+        List<AddressDTO> addressDTOs = addressService.getAllAddresses();
         return ResponseEntity.ok().body(new ResponseObject(HttpStatus.OK.value(), "Success", addressDTOs));
     }
 
