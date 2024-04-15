@@ -62,7 +62,7 @@ public class FoodService implements IFoodService {
     public void saveFood(FoodDTO foodDTO, MultipartFile file) throws IOException {
         String fileName = cloudinaryUtil.uploadImageToFolder(file, "food");
 
-        Category category = getCategoryById(foodDTO.getCategory());
+        Category category = getCategoryById(foodDTO.getCategoryId());
         System.out.println("Category: " + category.getName());
         Food food = foodMapper.toFood(foodDTO, category);
         food.setImgUrl(fileName);
@@ -71,7 +71,7 @@ public class FoodService implements IFoodService {
 
     @Override
     public void updateFood(Long id, FoodDTO foodDTO) {
-        Category category = getCategoryById(foodDTO.getCategory()); // You need to implement this method to get the Category entity
+        Category category = getCategoryById(foodDTO.getCategoryId()); // You need to implement this method to get the Category entity
         Food existingFood = foodRepository.findById(id).orElse(null);
 
         if (existingFood != null) {
