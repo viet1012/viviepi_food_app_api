@@ -15,7 +15,8 @@ public class FoodMapper {
         return FoodDTO.builder()
                 .id(food.getId())
                 .name(food.getName())
-                .category(food.getCategory().getId()) // Assuming you want to include only the category ID in DTO
+                .category(food.getCategory())
+                .categoryId(food.getCategory().getId()) // Assuming you want to include only the category ID in DTO
                 .imgUrl(food.getImgUrl())
                 .description(food.getDescription())
                 .quantity(food.getQuantity())
@@ -45,6 +46,7 @@ public class FoodMapper {
     public Food toFood(FoodDTO foodDTO) {
         Food food = new Food();
         food.setId(foodDTO.getId());
+        food.setCategory(foodDTO.getCategory());
         food.setName(foodDTO.getName());
         food.setImgUrl(foodDTO.getImgUrl());
         food.setDescription(foodDTO.getDescription());

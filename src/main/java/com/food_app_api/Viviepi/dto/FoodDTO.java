@@ -1,5 +1,6 @@
 package com.food_app_api.Viviepi.dto;
 
+import com.food_app_api.Viviepi.entities.Category;
 import com.google.api.client.util.DateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,8 @@ public class FoodDTO {
 
     private Long id;
     private String name;
-    private Long category;
+    private Long categoryId;
+    private Category category;
     private String categoryName; // Thêm trường này để chứa tên của danh mục
     private String imgUrl;
     private String description;

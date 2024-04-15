@@ -72,10 +72,10 @@ public class BillDetailService implements  IBillDetailService{
             if(food.getQuantity() - foodItem.getQuantity() > 0)
             {
                 food.setQuantity(food.getQuantity() - foodItem.getQuantity());
-                System.out.println("quantity: " +food.getId() +" "+ (food.getQuantity() - foodItem.getQuantity()));
                 foodRepository.save(food);
 
-            }else {
+            }else
+            {
                 throw new IllegalArgumentException("Không đủ số lượng sản phẩm có id = " + foodItem.getId());
             }
 
