@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "address_models")
+@Table(name = "address")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Address {
     @Column(name = "district")
 
     private String district;
-    @Column(name = "houseNumber")
+    @Column(name = "house_number")
 
     private String houseNumber;
     @Column(name = "note")
