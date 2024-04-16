@@ -141,4 +141,11 @@ public class BillService implements IBillService {
     public void deleteBill(long id) {
         billRepository.deleteById(id);
     }
+
+    @Override
+    public void deleteAll() {
+        billRepository.deleteAll();
+    }
+
+
 }

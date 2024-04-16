@@ -19,4 +19,6 @@ public interface IBillService {
     BillDTO updateBill(long id, BillDTO billDTO);
 
     void deleteBill(long id);
+    void deleteAll();
+
 }

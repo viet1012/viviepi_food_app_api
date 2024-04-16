@@ -25,12 +25,22 @@ public class BillDetailController {
     @GetMapping("/get/all")
     @Transactional(readOnly = true)
     public ResponseEntity<ResponseObject> getAllBillDetail(){
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject(200,
-                        "get all bill details completed !",
-                        billDetailService.getAllBillDetail()
-                )
-        );
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject(200,
+                            "get all bill details completed !",
+                            billDetailService.getAllBillDetail()
+                    )
+            );
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ResponseObject(500,
+                            e.getMessage(), ""
+
+                    )
+            );
+        }
+
     }
     @GetMapping("/get/details/{billId}")
     public ResponseEntity<ResponseObject> getBillDetailsByBillId(@PathVariable Long billId) {

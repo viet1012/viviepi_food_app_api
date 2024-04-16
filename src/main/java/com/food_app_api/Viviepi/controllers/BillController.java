@@ -60,4 +60,9 @@ public class BillController {
         }
     }
 
+    @DeleteMapping("/delete-all")
+    public ResponseEntity<String> deleteAll() {
+        billService.deleteAll();
+        return new ResponseEntity<>("All bill deleted successfully!", HttpStatus.OK);
+    }
 }
