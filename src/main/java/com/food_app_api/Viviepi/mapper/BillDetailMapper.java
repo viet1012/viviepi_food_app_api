@@ -15,6 +15,7 @@ public class BillDetailMapper {
                 .billId(billDetail.getBill().getId())
                 .foodId(billDetail.getFood() != null ? billDetail.getFood().getId() : null)
                 .quantity(billDetail.getQuantity())
+                .price(billDetail.getPrice())
                 .build();
     }
     public BillDetail toBill(BillDetailDTO billDetailDTO) {
