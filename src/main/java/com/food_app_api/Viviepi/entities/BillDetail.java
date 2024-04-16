@@ -12,6 +12,7 @@ import lombok.*;
 public class BillDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_bill_detail")
     private Long id;
 
     @ManyToOne
