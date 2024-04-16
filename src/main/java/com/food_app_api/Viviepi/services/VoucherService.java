@@ -132,6 +132,27 @@ public class VoucherService implements IVoucherService{
         return optionalVoucher.get();
     }
 
+    @Override
+    public Voucher findById(Long id) {
+        Optional<Voucher> optionalVoucher = voucherRepository.findById(id);
+        return optionalVoucher.get();
+    }
+
+    @Override
+    public void deleteVoucherById(Long id) {
+        boolean exist = voucherRepository.existsById(id);
+        if(!exist)
+        {
+            System.out.println("Cannot delete id: "+ id);
+            throw new ObjectNotFoundException(
+                    404, "Cannot delete id: "+ id
+            );
+        }
+        voucherRepository.deleteById(id);
+        System.out.println("Delete voucher is completed !");
+
+    }
+
     public LocalDateTime getEndDateByCode(String code) {
         Optional<LocalDateTime> endDateOptional = voucherRepository.findEndDateByCode(code);
         return endDateOptional.orElse(null); // Hoặc xử lý theo ý bạn khi không tìm thấy

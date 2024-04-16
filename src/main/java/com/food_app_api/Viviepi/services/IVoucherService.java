@@ -20,5 +20,8 @@ public interface IVoucherService {
     Boolean existDiscount(VoucherDTO discountTypeDTO);
     Boolean isExpire(String code);
     Voucher findByCode(String code);
+    Voucher findById(Long id);
+    void deleteVoucherById(Long id);
+
 
 }

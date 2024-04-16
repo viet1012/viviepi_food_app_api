@@ -58,9 +58,18 @@ public class VoucherController {
         voucherService.deleteVoucher();
         return new ResponseEntity<>("All vouchers deleted successfully!", HttpStatus.OK);
     }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteVoucherById(@PathVariable Long id) {
+        try {
+            voucherService.deleteVoucherById(id);
+            return new ResponseEntity<>("Voucher deleted successfully!", HttpStatus.OK);
+        } catch (ObjectNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 
-    @DeleteMapping("/delete-by-id/{code}")
-    public ResponseEntity<String> deleteVoucherById(@PathVariable String code) {
+    @DeleteMapping("/delete-by-code/{code}")
+    public ResponseEntity<String> deleteVoucherByCode(@PathVariable String code) {
 //        VoucherDTO voucherDTO = new VoucherDTO();
 //        voucherDTO.setId(id);
 
