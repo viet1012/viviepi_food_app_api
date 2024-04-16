@@ -113,4 +113,9 @@ public class BillDetailService implements  IBillDetailService{
             throw new IllegalArgumentException("Không tìm thấy chi tiết hóa đơn với ID: " + billDetailId);
         }
     }
+
+    @Override
+    public void deleteAll() {
+        billDetailRepository.deleteAll();
+    }
 }

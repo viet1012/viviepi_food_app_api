@@ -24,7 +24,7 @@ public class BillDetailController {
     private BillService billService;
     @GetMapping("/get/all")
     @Transactional(readOnly = true)
-    public ResponseEntity<ResponseObject> getAllUser(){
+    public ResponseEntity<ResponseObject> getAllBillDetail(){
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject(200,
                         "get all bill details completed !",
@@ -53,5 +53,11 @@ public class BillDetailController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @DeleteMapping("/delete-all")
+    public ResponseEntity<String> deleteAll() {
+        billDetailService.deleteAll();
+        return new ResponseEntity<>("All bill-detail deleted successfully!", HttpStatus.OK);
     }
 }

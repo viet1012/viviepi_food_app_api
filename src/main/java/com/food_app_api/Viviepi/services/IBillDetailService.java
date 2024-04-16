@@ -10,4 +10,5 @@ public interface IBillDetailService {
     List<BillDetailDTO> getAllBillDetail();
     List<BillDetailDTO> createBillDetail(BillDetailDTO newBillDetail, Long billId);
     BillDetail updateBillDetail(Long billDetailId, BillDetail updatedBillDetail);
+    void deleteAll();
 }
