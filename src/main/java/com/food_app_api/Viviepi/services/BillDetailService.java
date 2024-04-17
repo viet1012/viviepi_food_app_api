@@ -69,7 +69,7 @@ public class BillDetailService implements  IBillDetailService{
 //            int quantity = newBillDetail.getQuantity();
 //            totalPriceIncrease += unitPrice * quantity;
             Food food = foodMapper.toFood(foodDTO);
-            if(food.getQuantity() - foodItem.getQuantity() > 0)
+            if(food.getQuantity() - foodItem.getQuantity() >= 0)
             {
                 food.setQuantity(food.getQuantity() - foodItem.getQuantity());
                 foodRepository.save(food);
