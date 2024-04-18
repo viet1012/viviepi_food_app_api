@@ -78,6 +78,7 @@ public class UserService implements IUserService {
         if(existingUser!= null )
         {
             userMapper.toUser(existingUser,updatedUser);
+            userRepository.save(existingUser);
         }
     }
 
