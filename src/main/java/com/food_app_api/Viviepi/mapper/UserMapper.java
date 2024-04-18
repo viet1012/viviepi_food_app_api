@@ -13,6 +13,14 @@ import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
+    public User toUser(User user , UserDTO userDTO) {
+        user.setId(userDTO.getId());
+        user.setAvtUrl(userDTO.getAvtUrl());
+        user.setFullname(userDTO.getFullName());
+        user.setPhoneNumber(userDTO.getPhone());
+        return user;
+    }
+
     public UserDTO userToUserDTO(User user){
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail(user.getEmail());

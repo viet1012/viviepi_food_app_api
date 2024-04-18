@@ -14,6 +14,7 @@ import com.food_app_api.Viviepi.repositories.ITokenRepository;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import org.hibernate.ObjectNotFoundException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -67,6 +68,17 @@ public class UserService implements IUserService {
         }
         System.out.println("Get all user completed !");
         return userMapper.toUserDTOList(userRepository.findAll());
+    }
+
+    @Override
+    public void updateUser(Long userId, UserDTO updatedUser) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        if(existingUser!= null )
+        {
+            userMapper.toUser(existingUser,updatedUser);
+        }
     }
 
     @Override

@@ -2,24 +2,52 @@ package com.food_app_api.Viviepi.mapper;
 
 import com.food_app_api.Viviepi.dto.AddressDTO;
 import com.food_app_api.Viviepi.entities.Address;
+import com.food_app_api.Viviepi.entities.User;
+import com.food_app_api.Viviepi.repositories.IUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
 public class AddressMapper {
 
+    @Autowired
+    private IUserRepository userRepository;
+
+//    public AddressDTO toAddressDTO(Address address) {
+//        return AddressDTO.builder()
+//                .id(address.getId())
+//                .userId(address.getUserId())
+//                .ward(address.getWard())
+//                .district(address.getDistrict())
+//                .houseNumber(address.getHouseNumber())
+//                .note(address.getNote())
+//                .active(address.isActive())
+//                .build();
+//    }
     public AddressDTO toAddressDTO(Address address) {
-        return AddressDTO.builder()
-                .id(address.getId())
-                .userId(address.getUserId())
-                .ward(address.getWard())
-                .district(address.getDistrict())
-                .houseNumber(address.getHouseNumber())
-                .note(address.getNote())
-                .active(address.isActive())
-                .build();
+        Optional<User> optionalUser = userRepository.findById(address.getUserId());
+        if(optionalUser.isPresent())
+        {
+            User user = optionalUser.get();;
+            return AddressDTO.builder()
+                    .id(address.getId())
+                    .fullname(user.getFullname())
+                    .phoneNumber(user.getPhoneNumber() )
+                    .phoneNumber(user.getPhoneNumber())
+                    .ward(address.getWard())
+                    .district(address.getDistrict())
+                    .houseNumber(address.getHouseNumber())
+                    .note(address.getNote())
+                    .active(address.isActive())
+                    .build();
+        }
+        return null;
     }
 
     public List<AddressDTO> toAddressDTOList(List<Address> addressList) {

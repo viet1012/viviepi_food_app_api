@@ -9,6 +9,8 @@ import lombok.Setter;
 @Builder
 public class AddressDTO {
     private Long id;
+    private String fullname;
+    private String phoneNumber;
     private Long userId;
     private String ward;
     private String district;
