@@ -57,6 +57,7 @@ public class UserMapper {
         userDTO.setFullName(userEntity.getFullname());
         userDTO.setEmail(userEntity.getEmail());
         userDTO.setUserID(userEntity.getUserId());
+        userDTO.setPhone(userEntity.getPhoneNumber());
         return userDTO;
     }
 }
