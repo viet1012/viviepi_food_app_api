@@ -25,7 +25,7 @@ public class UserController {
         );
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseObject> updateUserByUserId(@RequestBody UserDTO userDTO, @PathVariable Long id)
+    public ResponseEntity<ResponseObject> updateUserByUserId(@RequestBody UserDTO userDTO, @PathVariable("id")  Long id)
     {
         userService.updateUser(id,userDTO);
         ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(), "User updated successfully", null);
