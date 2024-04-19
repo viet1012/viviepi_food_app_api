@@ -67,7 +67,7 @@ public class FoodController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseObject> deleteFood(@PathVariable Long id) {
+    public ResponseEntity<ResponseObject> deleteFood(@PathVariable("id")  Long id) {
         foodService.deleteFood(id);
         ResponseObject responseObject = new ResponseObject(HttpStatus.OK.value(), "Food deleted successfully", null);
         return new ResponseEntity<>(responseObject, HttpStatus.OK);
