@@ -20,6 +20,7 @@ public class BillDetailDTO {
     private Bill bill;
     private Food food;
     private double price;
+    private double priceFood;
     List<Long> foodIds;
     List<FoodDTO> foodDTOS;
 }

@@ -12,8 +12,9 @@ public class BillDetailMapper {
     public BillDetailDTO toDTO(BillDetail billDetail) {
         return BillDetailDTO.builder()
                 .id(billDetail.getId())
-                .bill(billDetail.getBill())
-                .food(billDetail.getFood())
+//                .bill(billDetail.getBill())
+//                .food(billDetail.getFood())
+                .priceFood(billDetail.getFood().getPrice())
                 .billId(billDetail.getBill().getId())
                 .foodId(billDetail.getFood() != null ? billDetail.getFood().getId() : null)
                 .quantity(billDetail.getQuantity())
