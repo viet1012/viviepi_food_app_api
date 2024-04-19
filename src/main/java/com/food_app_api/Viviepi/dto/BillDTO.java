@@ -28,5 +28,7 @@ public class BillDTO {
     private String nameVoucher;
     @Min(value = 10000, message = "Total price must be greater than 10000")
     private double totalPrice;
+    private String paymentMethod;
+
 
 }

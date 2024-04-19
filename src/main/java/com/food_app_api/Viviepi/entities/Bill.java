@@ -50,4 +50,8 @@ public class Bill {
 
     @Column(name = "total_price")
     private double totalPrice;
+
+    @Column(name = "payment_method")
+    private String payment_method;
+
 }

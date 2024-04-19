@@ -16,6 +16,7 @@ public class BillDetailDTO {
     private Long id;
     private Long billId;
     private Long foodId;
+    private FoodDTO foodDTO;
     private Integer quantity;
     private Bill bill;
     private Food food;

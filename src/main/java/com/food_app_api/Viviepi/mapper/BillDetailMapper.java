@@ -1,7 +1,9 @@
 package com.food_app_api.Viviepi.mapper;
 
 import com.food_app_api.Viviepi.dto.BillDetailDTO;
+import com.food_app_api.Viviepi.dto.FoodDTO;
 import com.food_app_api.Viviepi.entities.BillDetail;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,12 +11,14 @@ import java.util.stream.Collectors;
 
 @Component
 public class BillDetailMapper {
+    @Autowired
+    private FoodMapper foodMapper;
     public BillDetailDTO toDTO(BillDetail billDetail) {
         return BillDetailDTO.builder()
                 .id(billDetail.getId())
 //                .bill(billDetail.getBill())
 //                .food(billDetail.getFood())
-                .priceFood(billDetail.getFood().getPrice())
+                .foodDTO(foodMapper.toFoodDTO(billDetail.getFood()))
                 .billId(billDetail.getBill().getId())
                 .foodId(billDetail.getFood() != null ? billDetail.getFood().getId() : null)
                 .quantity(billDetail.getQuantity())

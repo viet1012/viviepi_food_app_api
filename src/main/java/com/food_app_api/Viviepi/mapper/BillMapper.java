@@ -23,6 +23,7 @@ public class BillMapper {
         billDTO.setStatus(bill.getStatus());
         billDTO.setNameVoucher(bill.getVoucher()!= null ? bill.getVoucher().getCode() : null);
         billDTO.setTotalPrice(bill.getTotalPrice());
+        billDTO.setPaymentMethod(bill.getPayment_method());
         return billDTO;
     }
 
@@ -42,6 +43,7 @@ public class BillMapper {
         bill.setStatus(billDTO.getStatus());
         bill.setVoucher(billDTO.getVoucher()!= null ? billDTO.getVoucher() : null);
         bill.setTotalPrice(billDTO.getTotalPrice());
+        bill.setPayment_method(billDTO.getPaymentMethod());
         return bill;
     }
 
