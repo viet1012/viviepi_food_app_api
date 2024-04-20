@@ -17,7 +17,7 @@ public class PaypalService {
 	private APIContext apiContext;
 
 	public Payment createPayment(
-			Double totalPrice,
+			Double totalPriceVND,
 			String currency,
 			String method,
 			String intent,
@@ -25,14 +25,16 @@ public class PaypalService {
 			String cancelUrl,
 			String successUrl) throws PayPalRESTException {
 
-//		double exchangeRate = 23000.0;
-//		Double totalPriceUSD = totalPrice / exchangeRate;
-//		// Round totalPriceUSD to 2 decimal places
-//		totalPriceUSD = new BigDecimal(totalPriceUSD).setScale(2, RoundingMode.HALF_UP).doubleValue();
+		// Tỷ giá hối đoái từ VND sang USD
+		double exchangeRate = 23000.0; // Tỷ giá 1 USD = 23000 VND
+
+		// Chuyển đổi tổng số tiền từ VND sang USD
+		Double totalPriceUSD = totalPriceVND / exchangeRate;
 
 		Amount amount = new Amount();
 		amount.setCurrency(currency);
-		amount.setTotal(String.format(Locale.forLanguageTag(currency),"%.2f",totalPrice));
+		// Làm tròn tổng số tiền USD tới 2 chữ số thập phân
+		amount.setTotal(String.format(Locale.US, "%.2f", totalPriceUSD));
 
 		Transaction transaction = new Transaction();
 		transaction.setDescription(description);

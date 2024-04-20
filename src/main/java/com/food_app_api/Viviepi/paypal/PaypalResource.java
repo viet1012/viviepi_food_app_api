@@ -30,10 +30,11 @@ public class PaypalResource {
                                                 @RequestParam(name = "codeVoucher", required = false) String codeVoucher,
                                                 @RequestParam(name = "Authorization") String token) {
         try {
+            Double totalprice = billDTO.getTotalPrice();
             String cancelUrl = "https://viviepi-food-app-api.onrender.com/api/Paypal/cancel";
             String successUrl = "https://viviepi-food-app-api.onrender.com/api/Paypal/success";
             Payment payment = paypalService.createPayment(
-                    5.0,
+                    totalprice,
                     "USD",
                     "paypal",
                     "sale",
