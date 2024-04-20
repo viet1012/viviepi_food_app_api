@@ -1,5 +1,7 @@
 package com.food_app_api.Viviepi.paypal;
 
+import com.food_app_api.Viviepi.dto.BillDTO;
+import com.food_app_api.Viviepi.services.BillService;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
@@ -15,6 +17,8 @@ public class PaypalResource {
 
     @Autowired
     private PaypalService paypalService;
+    @Autowired
+    private BillService billService;
 
 //    @GetMapping("/cancel")
 //    public ResponseEntity<String> cancelPay() {
@@ -22,7 +26,9 @@ public class PaypalResource {
 //    }
 
     @PostMapping("/create-payment")
-    public ResponseEntity<String> createPayment() {
+    public ResponseEntity<String> createPayment(@RequestBody BillDTO billDTO,
+                                                @RequestParam(name = "codeVoucher", required = false) String codeVoucher,
+                                                @RequestParam(name = "Authorization") String token) {
         try {
             String cancelUrl = "https://viviepi-food-app-api.onrender.com/api/Paypal/cancel";
             String successUrl = "https://viviepi-food-app-api.onrender.com/api/Paypal/success";
@@ -37,6 +43,7 @@ public class PaypalResource {
             );
             for (Links links : payment.getLinks()) {
                 if ("approval_url".equals(links.getRel())) {
+                    billService.createBill(billDTO,codeVoucher,token);
                     return ResponseEntity.ok(links.getHref());
                 }
             }
