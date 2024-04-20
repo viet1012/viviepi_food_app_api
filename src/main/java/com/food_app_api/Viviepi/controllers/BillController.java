@@ -59,6 +59,18 @@ public class BillController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ResponseObject> updateBill(@RequestBody BillDTO billDTO, @PathVariable Long id)
+    {
+        try {
+            BillDTO createdBill = billService.updateBill(id,  billDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
+                    201,"update bill completed", createdBill
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     @DeleteMapping("/delete-all")
     public ResponseEntity<String> deleteAll() {

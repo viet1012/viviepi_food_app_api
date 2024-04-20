@@ -129,9 +129,7 @@ public class BillService implements IBillService {
         Optional<Bill> billOptional = billRepository.findById(id);
         if (billOptional.isPresent()) {
             Bill bill = billOptional.get();
-            // Update bill fields
-            bill.setName(billDTO.getName());
-            // Update other fields as needed
+            bill.setStatus(billDTO.getStatus());
             return billMapper.toBillDTO(billRepository.save(bill));
         }
         return null; // Or throw an exception indicating the bill was not found
