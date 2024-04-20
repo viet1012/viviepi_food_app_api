@@ -10,7 +10,7 @@ import lombok.Setter;
 public class AddressDTO {
     private Long id;
     private String fullname;
-    private String phoneNumber;
+    private Long phoneNumber;
     private Long userId;
     private String ward;
     private String district;

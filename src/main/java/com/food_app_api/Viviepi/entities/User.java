@@ -38,7 +38,7 @@ public class User {
     private int gender;
 
     @Column(name = "phone")
-    private String phoneNumber;
+    private Long phoneNumber;
 
     @Column(name = "full_name")
     private String fullname;

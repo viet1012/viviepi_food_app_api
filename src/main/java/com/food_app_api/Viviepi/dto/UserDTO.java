@@ -18,7 +18,7 @@ public class UserDTO {
     private String password;
     private String avtUrl;
     private String fullName;
-    private String phone;
+    private Long phone;
     private String verifyCode;
     private String verifyCodeExpired;
     boolean isActive;
