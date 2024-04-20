@@ -43,7 +43,22 @@ public class VnpayController {
             if ("00".equals(vnp_ResponseCode)) {
                 // Giao dịch thành công
                 // Thực hiện các xử lý cần thiết, ví dụ: cập nhật CSDL
+                Optional<Bill> billOptional = billRepository.findById(Long.parseLong(billId));
+                if (billOptional.isPresent()) {
+                    Bill bill = billOptional.get();
 
+                    // Cập nhật trạng thái mới cho hóa đơn
+                    // bill.setStatus("Đã thanh toán");
+                    // Thực hiện tính toán lại tổng giá trị hóa đơn sau khi trừ tiền
+                    String total = queryParams.get("vnp_Amount");
+                    long totallong = Long.parseLong(total) / 100;
+                    bill.setTotalPrice(bill.getTotalPrice() - (float) totallong);
+
+                    billRepository.save(bill);
+                } else {
+                    String redirectUrl = "myappscheme://fail";
+                    return new ModelAndView(new RedirectView(redirectUrl));
+                }
                 // Trả về thông báo thành công và billId
                 String redirectUrl = "myappscheme://success";
                 return new ModelAndView(new RedirectView(redirectUrl));
@@ -60,12 +75,14 @@ public class VnpayController {
     }
 
 @PostMapping("pay")
-public ResponseEntity<String> getPay(@RequestBody BillDTO billRequest) throws UnsupportedEncodingException {
+public ResponseEntity<String> getPay(@RequestBody BillDTO billDTO,
+                                     @RequestParam(name = "codeVoucher", required = false) String codeVoucher,
+                                     @RequestParam(name = "Authorization") String token) throws UnsupportedEncodingException {
     try {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-        long amount = (long) (billRequest.getTotalPrice() * 100);
+        long amount = (long) (billDTO.getTotalPrice() * 100);
         String bankCode = "NCB";
 
         String vnp_TxnRef = VnpayConfig.getRandomNumber(8);
@@ -73,7 +90,7 @@ public ResponseEntity<String> getPay(@RequestBody BillDTO billRequest) throws Un
 
         String vnp_TmnCode = VnpayConfig.vnp_TmnCode;
 
-
+        BillDTO savedBill = billService.createBill(billDTO,codeVoucher,token);
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
@@ -87,7 +104,7 @@ public ResponseEntity<String> getPay(@RequestBody BillDTO billRequest) throws Un
         vnp_Params.put("vnp_OrderType", orderType);
 
         vnp_Params.put("vnp_Locale", "vn");
-        vnp_Params.put("vnp_ReturnUrl", VnpayConfig.vnp_ReturnUrl + "?billId=" + vnp_TxnRef);
+        vnp_Params.put("vnp_ReturnUrl", VnpayConfig.vnp_ReturnUrl + "?billId=" + String.valueOf(savedBill.getId()));
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
