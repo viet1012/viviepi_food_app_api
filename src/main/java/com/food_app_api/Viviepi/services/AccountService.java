@@ -150,7 +150,7 @@ public class AccountService implements IAccountService{
             user.setEmail(request.getEmail());
             if(request.isGoogle())
             {
-                user.setPassword(null);
+                user.setPassword("");
             }
             else {
                 user.setPassword(passwordEncoder.encode(request.getPassword()));
