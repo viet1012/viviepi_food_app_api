@@ -12,7 +12,7 @@ public class ReviewProductDTO {
     private Long id;
     private Long userId;
     private Long foodId;
-    private int rating;
+    private float rating;
     private String comment;
     private LocalDateTime createdDt;
 

@@ -25,7 +25,7 @@ public class ReviewProduct{
     private Food food;
 
     @Column(name = "rating")
-    private int rating;
+    private float rating;
 
     @Column(name = "comment")
     private String comment;
