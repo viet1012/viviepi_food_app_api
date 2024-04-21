@@ -1,6 +1,7 @@
 package com.food_app_api.Viviepi.controllers;
 
 import com.food_app_api.Viviepi.dto.ReviewProductDTO;
+import com.food_app_api.Viviepi.entities.ReviewProduct;
 import com.food_app_api.Viviepi.services.IReviewProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,8 @@ public class ReviewProductController {
     private  IReviewProductService reviewProductService;
 
     @PostMapping("/create")
-    public ResponseEntity<ReviewProductDTO> createReviewProduct(@RequestBody ReviewProductDTO reviewProductDTO) {
-        ReviewProductDTO createdReviewProduct = reviewProductService.createReviewProduct(reviewProductDTO);
+    public ResponseEntity<ReviewProduct> createReviewProduct(@RequestBody ReviewProductDTO reviewProductDTO) {
+        ReviewProduct createdReviewProduct = reviewProductService.createReviewProducts(reviewProductDTO);
         return new ResponseEntity<>(createdReviewProduct, HttpStatus.CREATED);
     }
 
