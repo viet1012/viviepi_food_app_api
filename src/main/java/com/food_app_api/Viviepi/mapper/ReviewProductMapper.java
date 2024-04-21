@@ -1,6 +1,7 @@
 package com.food_app_api.Viviepi.mapper;
 
 import com.food_app_api.Viviepi.dto.ReviewProductDTO;
+import com.food_app_api.Viviepi.dto.ReviewItemDTO;
 import com.food_app_api.Viviepi.entities.ReviewProduct;
 import com.food_app_api.Viviepi.entities.User;
 import com.food_app_api.Viviepi.entities.Food;
@@ -10,27 +11,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
 public class ReviewProductMapper {
 
     @Autowired
-    private  IUserRepository userRepository;
+    private IUserRepository userRepository;
+
     @Autowired
-    private  IFoodRepository foodRepository;
+    private IFoodRepository foodRepository;
 
     public ReviewProductDTO toDTO(ReviewProduct reviewProduct) {
         ReviewProductDTO dto = new ReviewProductDTO();
         dto.setId(reviewProduct.getId());
         dto.setUserId(reviewProduct.getUser().getId());
-        dto.setFoodId(reviewProduct.getFood().getId());
-        dto.setRating(reviewProduct.getRating());
-        dto.setComment(reviewProduct.getComment());
         dto.setCreatedDt(reviewProduct.getCreatedDt());
+        dto.setFoodId(reviewProduct.getFood().getId());
+        dto.setComment(reviewProduct.getComment());
+        dto.setRating(reviewProduct.getRating());
         return dto;
     }
-
 
     public ReviewProduct toEntity(ReviewProductDTO dto) {
         ReviewProduct reviewProduct = new ReviewProduct();
@@ -39,12 +41,22 @@ public class ReviewProductMapper {
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + dto.getUserId()));
         reviewProduct.setUser(user);
 
-        Food food = foodRepository.findById(dto.getFoodId())
-                .orElseThrow(() -> new RuntimeException("Food not found with id: " + dto.getFoodId()));
-        reviewProduct.setFood(food);
+        reviewProduct.setCreatedDt(dto.getCreatedDt());
 
-        reviewProduct.setRating(dto.getRating());
-        reviewProduct.setComment(dto.getComment());
+        // Map review items
+        List<ReviewItemDTO> reviewItemDTOs = dto.getReviewItems();
+        for (ReviewItemDTO reviewItemDTO : reviewItemDTOs) {
+            Optional<Food> food = foodRepository.findById(reviewItemDTO.getFoodId());
+            if(food.isPresent())
+            {
+                reviewProduct.setFood(food.get());
+                reviewProduct.setRating(reviewItemDTO.getRating());
+                reviewProduct.setComment(reviewItemDTO.getComment());
+            } else {
+                throw new RuntimeException("Food not found with id: " + reviewItemDTO.getFoodId());
+            }
+
+        }
 
         return reviewProduct;
     }

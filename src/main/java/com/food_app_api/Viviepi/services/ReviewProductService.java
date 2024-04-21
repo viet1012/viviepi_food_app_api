@@ -21,10 +21,9 @@ public class ReviewProductService implements IReviewProductService {
 
 
     @Override
-    public ReviewProductDTO createReviewProduct(ReviewProductDTO reviewProductDTO) {
-        ReviewProduct reviewProduct = reviewProductMapper.toEntity(reviewProductDTO);
-        reviewProduct = reviewProductRepository.save(reviewProduct);
-        return reviewProductMapper.toDTO(reviewProduct);
+    public ReviewProduct createReviewProducts(ReviewProductDTO reviewProductDTOs) {
+        return  reviewProductRepository.save(reviewProductMapper.toEntity(reviewProductDTOs));
+
     }
 
     @Override
