@@ -11,6 +11,8 @@ import java.util.List;
 public interface IReviewProductService {
     ReviewProduct createReviewProducts(ReviewProductDTO reviewProductDTOs);
     ReviewProductDTO getReviewProductById(Long id);
+    List<ReviewProductDTO> getReviewProductByUserId(Long userId);
+
     List<ReviewProductDTO> getAllReviewProducts();
     ReviewProductDTO updateReviewProduct(Long id, ReviewProductDTO reviewProductDTO);
     void deleteReviewProduct(Long id);

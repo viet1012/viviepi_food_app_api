@@ -23,6 +23,12 @@ public class ReviewProductController {
         return new ResponseEntity<>(createdReviewProduct, HttpStatus.CREATED);
     }
 
+    @GetMapping("/get/user/{id}")
+    public ResponseEntity<List<ReviewProductDTO>> getReviewProductByUserId(@PathVariable Long id) {
+        List<ReviewProductDTO> reviewProductDTO = reviewProductService.getReviewProductByUserId(id);
+        return new ResponseEntity<>(reviewProductDTO, HttpStatus.OK);
+    }
+
     @GetMapping("/get/{id}")
     public ResponseEntity<ReviewProductDTO> getReviewProductById(@PathVariable Long id) {
         ReviewProductDTO reviewProductDTO = reviewProductService.getReviewProductById(id);

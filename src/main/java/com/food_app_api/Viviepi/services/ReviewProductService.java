@@ -34,6 +34,12 @@ public class ReviewProductService implements IReviewProductService {
     }
 
     @Override
+    public List<ReviewProductDTO> getReviewProductByUserId(Long userId) {
+        List<ReviewProduct> reviewProducts = reviewProductRepository.findByUserId(userId);
+        return reviewProductMapper.toListDTO(reviewProducts);
+    }
+
+    @Override
     public List<ReviewProductDTO> getAllReviewProducts() {
         List<ReviewProduct> reviewProducts = reviewProductRepository.findAll();
         return reviewProducts.stream()
