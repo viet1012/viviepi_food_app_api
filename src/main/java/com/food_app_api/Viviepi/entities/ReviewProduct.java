@@ -1,12 +1,16 @@
 package com.food_app_api.Viviepi.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 @Entity
-@Table(name = "review_product_models")
+@Table(name = "review_food")
 public class ReviewProduct{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

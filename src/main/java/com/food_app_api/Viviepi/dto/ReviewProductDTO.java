@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ReviewProductDTO {
-    private String token;
+  //  private String token;
     private Long id;
     private Long userId;
     private Long foodId;
