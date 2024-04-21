@@ -42,23 +42,7 @@ public class VnpayController {
         if (billId != null && !billId.isEmpty()) {
             if ("00".equals(vnp_ResponseCode)) {
                 // Giao dịch thành công
-                // Thực hiện các xử lý cần thiết, ví dụ: cập nhật CSDL
-                Optional<Bill> billOptional = billRepository.findById(Long.parseLong(billId));
-                if (billOptional.isPresent()) {
-                    Bill bill = billOptional.get();
 
-                    // Cập nhật trạng thái mới cho hóa đơn
-                    // bill.setStatus("Đã thanh toán");
-                    // Thực hiện tính toán lại tổng giá trị hóa đơn sau khi trừ tiền
-                    String total = queryParams.get("vnp_Amount");
-                    long totallong = Long.parseLong(total) / 100;
-                    bill.setTotalPrice(bill.getTotalPrice() - (float) totallong);
-
-                    billRepository.save(bill);
-                } else {
-                    String redirectUrl = "myappscheme://fail";
-                    return new ModelAndView(new RedirectView(redirectUrl));
-                }
                 // Trả về thông báo thành công và billId
                 String redirectUrl = "myappscheme://success";
                 return new ModelAndView(new RedirectView(redirectUrl));

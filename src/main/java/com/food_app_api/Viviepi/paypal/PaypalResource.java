@@ -28,7 +28,8 @@ public class PaypalResource {
     @PostMapping("/create-payment")
     public ResponseEntity<String> createPayment(@RequestBody BillDTO billDTO,
                                                 @RequestParam(name = "codeVoucher", required = false) String codeVoucher,
-                                                @RequestParam(name = "Authorization") String token) {
+                                                @RequestParam(name = "Authorization") String token
+    ) {
         try {
             Double totalprice = billDTO.getTotalPrice();
             String cancelUrl = "https://viviepi-food-app-api.onrender.com/api/Paypal/cancel";
@@ -41,11 +42,14 @@ public class PaypalResource {
                     "ThanhToan",
                     cancelUrl,
                     successUrl
+
             );
             for (Links links : payment.getLinks()) {
                 if ("approval_url".equals(links.getRel())) {
-                    billService.createBill(billDTO,codeVoucher,token);
-                    return ResponseEntity.ok(links.getHref());
+                    BillDTO savedBill = billService.createBill(billDTO,codeVoucher,token);
+                    System.out.println("ID của savedBill: " + savedBill.getId());
+                    return ResponseEntity.ok(links.getHref() + "?billId=" + savedBill.getId());
+
                 }
             }
             return ResponseEntity.status(500).body("Approval URL not found");
