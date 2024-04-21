@@ -73,7 +73,11 @@ public class BillDetailController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteAll(@PathVariable Long id) {
+        billService.deleteBill(id);
+        return new ResponseEntity<>("bill detail: "+ id +" deleted successfully!", HttpStatus.OK);
+    }
     @DeleteMapping("/delete-all")
     public ResponseEntity<String> deleteAll() {
         billDetailService.deleteAll();
