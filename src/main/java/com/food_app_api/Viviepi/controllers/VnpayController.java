@@ -100,7 +100,7 @@ public ResponseEntity<String> getPay(@RequestBody BillDTO billDTO,
 
         vnp_Params.put("vnp_BankCode", bankCode);
         vnp_Params.put("vnp_TxnRef", String.valueOf(savedBill));
-        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + String.valueOf(savedBill)));
+        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + String.valueOf(savedBill));
         vnp_Params.put("vnp_OrderType", orderType);
 
         vnp_Params.put("vnp_Locale", "vn");
