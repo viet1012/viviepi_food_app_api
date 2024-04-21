@@ -91,6 +91,8 @@ public ResponseEntity<String> getPay(@RequestBody BillDTO billDTO,
         String vnp_TmnCode = VnpayConfig.vnp_TmnCode;
 
         BillDTO savedBill = billService.createBill(billDTO,codeVoucher,token);
+        System.out.println("ID của savedBill: " + savedBill.getId());
+
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
@@ -99,12 +101,12 @@ public ResponseEntity<String> getPay(@RequestBody BillDTO billDTO,
         vnp_Params.put("vnp_CurrCode", "VND");
 
         vnp_Params.put("vnp_BankCode", bankCode);
-        vnp_Params.put("vnp_TxnRef", String.valueOf(savedBill));
-        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + String.valueOf(savedBill));
+        vnp_Params.put("vnp_TxnRef", String.valueOf(savedBill.getId()));
+        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + String.valueOf(savedBill.getId())); // Sử dụng 'id' của savedBill
         vnp_Params.put("vnp_OrderType", orderType);
 
         vnp_Params.put("vnp_Locale", "vn");
-        vnp_Params.put("vnp_ReturnUrl", VnpayConfig.vnp_ReturnUrl + "?billId=" + String.valueOf(savedBill.getId()));
+        vnp_Params.put("vnp_ReturnUrl", VnpayConfig.vnp_ReturnUrl + "?billId=" + savedBill.getId()); // Sử dụng 'id' của savedBil
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
