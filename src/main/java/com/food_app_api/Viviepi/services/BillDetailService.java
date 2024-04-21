@@ -45,6 +45,13 @@ public class BillDetailService implements  IBillDetailService{
     }
 
     @Override
+    public int countTotalBillDetailsByBillId(Long billId) {
+        List<BillDetail> billDetails = billDetailRepository.findByBillId(billId);
+
+        return billDetails.size();
+    }
+
+    @Override
     public List<BillDetailDTO> getAllBillDetail() {
         List<BillDetail> billDetails = billDetailRepository.findAll();
         return billDetailMapper.toBillDetailDTOList(billDetails);

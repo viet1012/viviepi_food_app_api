@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface IBillDetailService {
     List<BillDetailDTO> getBillDetailsByBillId(Long billId);
+     int countTotalBillDetailsByBillId(Long billId);
     List<BillDetailDTO> getAllBillDetail();
     List<BillDetailDTO> createBillDetail(BillDetailDTO newBillDetail, Long billId);
     BillDetail updateBillDetail(Long billDetailId, BillDetail updatedBillDetail);

@@ -42,6 +42,15 @@ public class BillDetailController {
         }
 
     }
+    @GetMapping("/count/details/{billId}")
+    public ResponseEntity<ResponseObject> countBillDetailsByBillId(@PathVariable Long billId) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject(200,
+                        "Total bill details  by bill id: " + billId +" completed !",
+                        billDetailService.countTotalBillDetailsByBillId(billId)
+                )
+        );
+    }
     @GetMapping("/get/details/{billId}")
     public ResponseEntity<ResponseObject> getBillDetailsByBillId(@PathVariable Long billId) {
         return ResponseEntity.status(HttpStatus.OK).body(
